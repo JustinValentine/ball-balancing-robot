@@ -1,0 +1,71 @@
+{
+  "platform": "platform.example.json",
+  "left_origin_mm": [
+    -16.877,
+    10.003,
+    38.003
+  ],
+  "surface_offset_mm": 28.55,
+  "ball": {
+    "radius_mm": 20,
+    "inertia_ratio": 0.6667,
+    "restitution": 0.88,
+    "tangential_restitution": 0.6,
+    "drag_per_m": 0.126
+  },
+  "vision": {
+    "exposure_to_timestamp_us": 3000,
+    "noise_xy_mm": 0.4,
+    "noise_depth_mm": 1.0,
+    "lost_after_ms": 150,
+    "rolling_accel_noise_m_s2": 0.1
+  },
+  "limits": {
+    "crank_min_rad": -1.45,
+    "crank_max_rad": 0.3,
+    "tilt_max_deg": 8,
+    "stroke_yaw_deg": 11.5,
+    "crank_speed_max_rad_s": 10,
+    "crank_accel_max_rad_s2": 800
+  },
+  "plate": {
+    "mass_kg": 1.07,
+    "com_above_joints_mm": 25,
+    "tilt_inertia_kg_m2": 0.012
+  },
+  "operation": {
+    "idle_yaw_deg": -20,
+    "command_lead_ms": 0
+  },
+  "balance": {
+    "tilt_time_constant_s": 0.06,
+    "q_position": 400,
+    "q_velocity": 4,
+    "q_integral": 2000,
+    "r_tilt": 40,
+    "reference_rate_rad_s": 8,
+    "target_radius_mm": 150,
+    "q_tilt_rate": 20,
+    "tilt_acceleration_feedforward": false,
+    "soft_start_s": 0.4
+  },
+  "bounce": {
+    "apex_mm": 100,
+    "stroke_time_s": 0.08,
+    "decel_g": 1.5,
+    "return_time_s": 0.15,
+    "plate_speed_max_m_s": 0.35,
+    "lateral_gain": 0.7,
+    "lateral_integral": 0.15,
+    "launch_speed_m_s": 0.6,
+    "launch_dip_mm": 18
+  },
+  "gravity_calibration": {
+    "yaw_step_deg": 8,
+    "tilt_deg": 7,
+    "speed_rad_s": 0.15,
+    "settle_s": 0.4,
+    "average_s": 0.8,
+    "approach_rad": 0.03
+  }
+}

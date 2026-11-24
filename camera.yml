@@ -1,0 +1,21 @@
+%YAML:1.0
+# Copy the GUIDs from ball-vision list. Keep the quotes.
+left_guid: ""
+right_guid: ""
+format7_mode: 0
+packet_bytes: 0  # zero uses the camera's maximum for this mode
+trigger_mode: 0
+trigger_source: 0
+# -1 preserves current camera polarity, 0 active low, 1 active high
+trigger_active_high: -1
+# Zero preserves camera exposure. Positive values request absolute shutter in us.
+exposure_us: 0.
+# -1 preserves gain. Otherwise sets manual raw IIDC gain units.
+gain_raw: -1
+# Filter Linux capture timestamps. Must be less than half the trigger period.
+trigger_period_us: 5000
+pair_tolerance_us: 900
+# Right timestamp minus left for exposures of the same trigger, measured on rig
+right_offset_us: 0
+# For fixed VGA MONO8 instead, set format7_mode to -1 and choose a listed rate index
+fixed_rate_index: 7

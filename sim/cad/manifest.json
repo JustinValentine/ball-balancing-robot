@@ -1,0 +1,3719 @@
+{
+ "format": 1,
+ "units": "mm",
+ "document": "spherical-parallel-mechanism",
+ "version": 12,
+ "bodies": [
+  {
+   "file": "bodies/000.stl",
+   "key": "Body25",
+   "body": "Body25",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Glass - Clouds",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    0.35
+   ],
+   "triangles": 536,
+   "frame": "context",
+   "placement_error_mm": 1.0372435996466032e-05,
+   "bounds_mm": [
+    [
+     -186.84209823608398,
+     -199.99650955200195,
+     202.99999237060547
+    ],
+    [
+     228.15790176391602,
+     219.99650955200195,
+     207.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/001.stl",
+   "key": "Body27",
+   "body": "Body27",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 3224,
+   "frame": "context",
+   "placement_error_mm": 9.179437153760346e-06,
+   "bounds_mm": [
+    [
+     188.15790176391602,
+     -20.0,
+     177.01923370361328
+    ],
+    [
+     228.15790176391602,
+     40.0,
+     202.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/002.stl",
+   "key": "Body28",
+   "body": "Body28",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2844,
+   "frame": "context",
+   "placement_error_mm": 0.009600016826444121,
+   "bounds_mm": [
+    [
+     -104.11523818969727,
+     140.83951950073242,
+     177.01923370361328
+    ],
+    [
+     -36.30667448043823,
+     201.38086318969727,
+     202.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/003.stl",
+   "key": "Body29",
+   "body": "Body29",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2844,
+   "frame": "context",
+   "placement_error_mm": 0.00960001682637324,
+   "bounds_mm": [
+    [
+     -104.11523818969727,
+     -181.38086318969727,
+     177.01923370361328
+    ],
+    [
+     -36.30667448043823,
+     -120.83951950073242,
+     202.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/004.stl",
+   "key": "Body30",
+   "body": "Body30",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 786,
+   "frame": "context",
+   "placement_error_mm": 0.009655354347318975,
+   "bounds_mm": [
+    [
+     -104.1153621673584,
+     140.83951950073242,
+     207.99999237060547
+    ],
+    [
+     -36.30667448043823,
+     201.38086318969727,
+     212.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/005.stl",
+   "key": "Body31",
+   "body": "Body31",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 786,
+   "frame": "context",
+   "placement_error_mm": 0.009600018041209794,
+   "bounds_mm": [
+    [
+     -104.11523818969727,
+     -181.38086318969727,
+     207.99999237060547
+    ],
+    [
+     -36.30667448043823,
+     -120.83951950073242,
+     212.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/006.stl",
+   "key": "Body32",
+   "body": "Body32",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 912,
+   "frame": "context",
+   "placement_error_mm": 1.037243590019094e-05,
+   "bounds_mm": [
+    [
+     188.15790176391602,
+     -20.0,
+     207.99999237060547
+    ],
+    [
+     228.15790176391602,
+     40.0,
+     212.99999237060547
+    ]
+   ]
+  },
+  {
+   "file": "bodies/007.stl",
+   "key": "Body33",
+   "body": "Body33",
+   "occurrence": "",
+   "component": "spherical-parallel-mechanism",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 428,
+   "frame": "context",
+   "placement_error_mm": 0.00455544228639084,
+   "bounds_mm": [
+    [
+     214.52505111694336,
+     4.000000059604645,
+     177.9582405090332
+    ],
+    [
+     222.99787521362305,
+     15.990889072418213,
+     189.7756004333496
+    ]
+   ]
+  },
+  {
+   "file": "bodies/008.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1376,
+   "frame": "context",
+   "placement_error_mm": 0.0019495962868382993,
+   "bounds_mm": [
+    [
+     -6.463513374328613,
+     183.78576278686523,
+     84.89226341247559
+    ],
+    [
+     16.343194246292114,
+     203.3711814880371,
+     107.34445571899414
+    ]
+   ]
+  },
+  {
+   "file": "bodies/009.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1014,
+   "frame": "context",
+   "placement_error_mm": 0.6308212893990263,
+   "bounds_mm": [
+    [
+     -0.9270959347486496,
+     186.0879898071289,
+     90.6134033203125
+    ],
+    [
+     13.044624328613281,
+     197.6906394958496,
+     104.20398712158203
+    ]
+   ]
+  },
+  {
+   "file": "bodies/010.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1274,
+   "frame": "context",
+   "placement_error_mm": 0.6309251287952644,
+   "bounds_mm": [
+    [
+     -3.1614527106285095,
+     186.67823791503906,
+     88.03301811218262
+    ],
+    [
+     12.240842580795288,
+     201.06895446777344,
+     103.43179702758789
+    ]
+   ]
+  },
+  {
+   "file": "bodies/011.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017278253537885298,
+   "bounds_mm": [
+    [
+     -2.7495118975639343,
+     191.89512252807617,
+     99.62869644165039
+    ],
+    [
+     0.6840236485004425,
+     195.33435821533203,
+     103.0656623840332
+    ]
+   ]
+  },
+  {
+   "file": "bodies/012.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body5",
+   "body": "Body5",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0020016626074392425,
+   "bounds_mm": [
+    [
+     0.7038334012031555,
+     194.97591018676758,
+     101.25840187072754
+    ],
+    [
+     4.143512547016144,
+     198.4137725830078,
+     104.68795776367188
+    ]
+   ]
+  },
+  {
+   "file": "bodies/013.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body6",
+   "body": "Body6",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.00232716242586636,
+   "bounds_mm": [
+    [
+     5.124013423919678,
+     196.86532974243164,
+     100.26115417480469
+    ],
+    [
+     8.559132814407349,
+     200.2962303161621,
+     103.69614601135254
+    ]
+   ]
+  },
+  {
+   "file": "bodies/014.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body7",
+   "body": "Body7",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0020635321985991687,
+   "bounds_mm": [
+    [
+     8.814055919647217,
+     196.84398651123047,
+     97.03386306762695
+    ],
+    [
+     12.251980304718018,
+     200.27273178100586,
+     100.46507835388184
+    ]
+   ]
+  },
+  {
+   "file": "bodies/015.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body8",
+   "body": "Body8",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.002343504956400422,
+   "bounds_mm": [
+    [
+     10.370289087295532,
+     194.9180793762207,
+     92.79455184936523
+    ],
+    [
+     13.804595470428467,
+     198.35554122924805,
+     96.2343978881836
+    ]
+   ]
+  },
+  {
+   "file": "bodies/016.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body9",
+   "body": "Body9",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017298212695397506,
+   "bounds_mm": [
+    [
+     9.199429750442505,
+     191.8225860595703,
+     89.17203903198242
+    ],
+    [
+     12.632964849472046,
+     195.26182174682617,
+     92.60900497436523
+    ]
+   ]
+  },
+  {
+   "file": "bodies/017.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body10",
+   "body": "Body10",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0020051396405725377,
+   "bounds_mm": [
+    [
+     5.7399410009384155,
+     188.74317169189453,
+     87.54974365234375
+    ],
+    [
+     9.179620146751404,
+     192.18103408813477,
+     90.97929954528809
+    ]
+   ]
+  },
+  {
+   "file": "bodies/018.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0023394611312294346,
+   "bounds_mm": [
+    [
+     1.3243205845355988,
+     186.86073303222656,
+     88.54155540466309
+    ],
+    [
+     4.759440124034882,
+     190.29163360595703,
+     91.97654724121094
+    ]
+   ]
+  },
+  {
+   "file": "bodies/019.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.002061236465086458,
+   "bounds_mm": [
+    [
+     -2.36852690577507,
+     186.88421249389648,
+     91.77263259887695
+    ],
+    [
+     1.0693978518247604,
+     190.31295776367188,
+     95.20383834838867
+    ]
+   ]
+  },
+  {
+   "file": "bodies/020.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0023455271167445524,
+   "bounds_mm": [
+    [
+     -3.9211419224739075,
+     188.8014030456543,
+     96.00330352783203
+    ],
+    [
+     -0.486835315823555,
+     192.23886489868164,
+     99.44314956665039
+    ]
+   ]
+  },
+  {
+   "file": "bodies/021.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 8576,
+   "frame": "context",
+   "placement_error_mm": 0.8849186245661731,
+   "bounds_mm": [
+    [
+     -88.75086784362793,
+     174.81605529785156,
+     149.6494960784912
+    ],
+    [
+     -44.254775047302246,
+     194.5431137084961,
+     190.43167114257812
+    ]
+   ]
+  },
+  {
+   "file": "bodies/022.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Brass - Polished",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1488,
+   "frame": "context",
+   "placement_error_mm": 0.005769488135642571,
+   "bounds_mm": [
+    [
+     -85.58968544006348,
+     176.74129486083984,
+     171.53417587280273
+    ],
+    [
+     -69.7227430343628,
+     192.62054443359375,
+     187.37537384033203
+    ]
+   ]
+  },
+  {
+   "file": "bodies/023.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1512,
+   "frame": "context",
+   "placement_error_mm": 2.041707766407584,
+   "bounds_mm": [
+    [
+     -69.9784517288208,
+     108.09494972229004,
+     15.011481046676636
+    ],
+    [
+     21.76811456680298,
+     209.76633071899414,
+     112.61007308959961
+    ]
+   ]
+  },
+  {
+   "file": "bodies/024.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 636,
+   "frame": "context",
+   "placement_error_mm": 0.28734912177497146,
+   "bounds_mm": [
+    [
+     -69.53346729278564,
+     169.74939346313477,
+     85.72294235229492
+    ],
+    [
+     27.422237396240234,
+     198.53986740112305,
+     173.7999725341797
+    ]
+   ]
+  },
+  {
+   "file": "bodies/025.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 364,
+   "frame": "context",
+   "placement_error_mm": 3.4567196299340497e-06,
+   "bounds_mm": [
+    [
+     -0.27098750695586205,
+     183.68890762329102,
+     91.41039848327637
+    ],
+    [
+     14.54681396484375,
+     195.86023330688477,
+     105.8991813659668
+    ]
+   ]
+  },
+  {
+   "file": "bodies/026.stl",
+   "key": "8308 Mount:1+ARM:1+Link1:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:1+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 388,
+   "frame": "context",
+   "placement_error_mm": 3.127313704222493e-06,
+   "bounds_mm": [
+    [
+     -8.722909092903137,
+     188.90750885009766,
+     82.28226661682129
+    ],
+    [
+     13.410102128982544,
+     207.2496223449707,
+     103.95530700683594
+    ]
+   ]
+  },
+  {
+   "file": "bodies/027.stl",
+   "key": "8308 Mount:1+MagnetHolder:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:1+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "EPX 86FR (with Carbon M2 M3 L1 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 406,
+   "frame": "context",
+   "placement_error_mm": 0.5443188538615453,
+   "bounds_mm": [
+    [
+     -72.27384567260742,
+     147.27434158325195,
+     14.160938262939453
+    ],
+    [
+     -50.789217948913574,
+     165.99346160888672,
+     26.504852771759033
+    ]
+   ]
+  },
+  {
+   "file": "bodies/028.stl",
+   "key": "8308 Mount:1+MagnetHolder:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:1+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 192,
+   "frame": "context",
+   "placement_error_mm": 0.003657964864810927,
+   "bounds_mm": [
+    [
+     -66.6296911239624,
+     156.03400230407715,
+     15.073808431625366
+    ],
+    [
+     -59.53573226928711,
+     162.61306762695312,
+     22.15492010116577
+    ]
+   ]
+  },
+  {
+   "file": "bodies/029.stl",
+   "key": "8308 Mount:1+20210124-moteus-controller-r45-mechanical v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:1+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1384,
+   "frame": "context",
+   "placement_error_mm": 2.204984544801881,
+   "bounds_mm": [
+    [
+     -90.3213882446289,
+     136.84639930725098,
+     -17.763006687164307
+    ],
+    [
+     -39.458537101745605,
+     182.77463912963867,
+     31.712396144866943
+    ]
+   ]
+  },
+  {
+   "file": "bodies/030.stl",
+   "key": "8308 Mount:1/motor",
+   "body": "motor",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 360,
+   "frame": "context",
+   "placement_error_mm": 0.006971797737604512,
+   "bounds_mm": [
+    [
+     -102.01438903808594,
+     103.40720176696777,
+     -18.320775032043457
+    ],
+    [
+     -6.9659847021102905,
+     185.4725456237793,
+     75.39265632629395
+    ]
+   ]
+  },
+  {
+   "file": "bodies/031.stl",
+   "key": "8308 Mount:1/mount",
+   "body": "mount",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1722,
+   "frame": "context",
+   "placement_error_mm": 5.576066826763215,
+   "bounds_mm": [
+    [
+     -91.77375793457031,
+     73.77890586853027,
+     -30.55058479309082
+    ],
+    [
+     17.94273614883423,
+     154.2133617401123,
+     -2.100551128387451
+    ]
+   ]
+  },
+  {
+   "file": "bodies/032.stl",
+   "key": "8308 Mount:1/palte",
+   "body": "palte",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 924,
+   "frame": "context",
+   "placement_error_mm": 4.773543068618921,
+   "bounds_mm": [
+    [
+     -86.82390213012695,
+     115.40158271789551,
+     -32.13808536529541
+    ],
+    [
+     -21.84981107711792,
+     175.6712532043457,
+     45.22663593292236
+    ]
+   ]
+  },
+  {
+   "file": "bodies/033.stl",
+   "key": "8308 Mount:1/MC mount",
+   "body": "MC mount",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2268,
+   "frame": "context",
+   "placement_error_mm": 0.0020732994314243023,
+   "bounds_mm": [
+    [
+     -88.56698036193848,
+     135.90673446655273,
+     -5.960209369659424
+    ],
+    [
+     -36.71757936477661,
+     181.21047973632812,
+     34.978885650634766
+    ]
+   ]
+  },
+  {
+   "file": "bodies/034.stl",
+   "key": "8308 Mount:1/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 1.1386531104098675e-06,
+   "bounds_mm": [
+    [
+     180.70716857910156,
+     -12.500002384185791,
+     -5.952314138412476
+    ],
+    [
+     189.60636138916016,
+     -7.499999403953552,
+     2.062523365020752
+    ]
+   ]
+  },
+  {
+   "file": "bodies/035.stl",
+   "key": "8308 Mount:1/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 3.6451255613182963e-06,
+   "bounds_mm": [
+    [
+     180.70716857910156,
+     27.499995231628418,
+     -5.952314138412476
+    ],
+    [
+     189.60636138916016,
+     32.49999761581421,
+     2.062523365020752
+    ]
+   ]
+  },
+  {
+   "file": "bodies/036.stl",
+   "key": "8308 Mount:1/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 3.827635990329622e-06,
+   "bounds_mm": [
+    [
+     199.7071647644043,
+     -12.499998807907104,
+     26.956651210784912
+    ],
+    [
+     208.6063575744629,
+     -7.499997019767761,
+     34.971489906311035
+    ]
+   ]
+  },
+  {
+   "file": "bodies/037.stl",
+   "key": "8308 Mount:1/Body14",
+   "body": "Body14",
+   "occurrence": "8308 Mount:1",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 3.209162425111052e-06,
+   "bounds_mm": [
+    [
+     199.7071647644043,
+     27.49999761581421,
+     26.956651210784912
+    ],
+    [
+     208.6063575744629,
+     32.50000238418579,
+     34.971489906311035
+    ]
+   ]
+  },
+  {
+   "file": "bodies/038.stl",
+   "key": "Base 8308:1/Body1",
+   "body": "Body1",
+   "occurrence": "Base 8308:1",
+   "component": "Base 8308",
+   "appearance": "Oak",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 760,
+   "frame": "context",
+   "placement_error_mm": 2.3300545161010897e-06,
+   "bounds_mm": [
+    [
+     -126.84210777282715,
+     -140.0,
+     -33.17500114440918
+    ],
+    [
+     173.15790176391602,
+     160.0,
+     -30.0
+    ]
+   ]
+  },
+  {
+   "file": "bodies/039.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1268,
+   "frame": "context",
+   "placement_error_mm": 2.3235066935683476e-06,
+   "bounds_mm": [
+    [
+     182.73136138916016,
+     -77.13786602020264,
+     84.9009895324707
+    ],
+    [
+     199.6586036682129,
+     -54.94332790374756,
+     107.33671188354492
+    ]
+   ]
+  },
+  {
+   "file": "bodies/040.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 998,
+   "frame": "context",
+   "placement_error_mm": 0.47647699789205833,
+   "bounds_mm": [
+    [
+     184.46603775024414,
+     -73.30097675323486,
+     90.61554908752441
+    ],
+    [
+     194.30248260498047,
+     -58.76601696014404,
+     104.20120239257812
+    ]
+   ]
+  },
+  {
+   "file": "bodies/041.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1274,
+   "frame": "context",
+   "placement_error_mm": 0.44451331022805163,
+   "bounds_mm": [
+    [
+     184.9106216430664,
+     -73.30981254577637,
+     88.03301811218262
+    ],
+    [
+     197.91866302490234,
+     -58.76894474029541,
+     103.43179702758789
+    ]
+   ]
+  },
+  {
+   "file": "bodies/042.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.00187407082487953,
+   "bounds_mm": [
+    [
+     192.49435424804688,
+     -62.605910301208496,
+     99.62869644165039
+    ],
+    [
+     195.92851638793945,
+     -59.16529655456543,
+     103.0656623840332
+    ]
+   ]
+  },
+  {
+   "file": "bodies/043.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body5",
+   "body": "Body5",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.001594889650892048,
+   "bounds_mm": [
+    [
+     193.43303680419922,
+     -67.13462829589844,
+     101.25840187072754
+    ],
+    [
+     196.86859130859375,
+     -63.70102882385254,
+     104.68795776367188
+    ]
+   ]
+  },
+  {
+   "file": "bodies/044.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body6",
+   "body": "Body6",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017247243221746463,
+   "bounds_mm": [
+    [
+     192.8614044189453,
+     -71.90788745880127,
+     100.26115417480469
+    ],
+    [
+     196.2986183166504,
+     -68.46796989440918,
+     103.69614601135254
+    ]
+   ]
+  },
+  {
+   "file": "bodies/045.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body7",
+   "body": "Body7",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 8.99059372395122e-05,
+   "bounds_mm": [
+    [
+     190.99672317504883,
+     -75.0931453704834,
+     97.03386306762695
+    ],
+    [
+     194.43096160888672,
+     -71.65463447570801,
+     100.46507835388184
+    ]
+   ]
+  },
+  {
+   "file": "bodies/046.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body8",
+   "body": "Body8",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0006540184340825,
+   "bounds_mm": [
+    [
+     188.55310440063477,
+     -75.47698497772217,
+     92.79455184936523
+    ],
+    [
+     191.9849967956543,
+     -72.04058170318604,
+     96.2343978881836
+    ]
+   ]
+  },
+  {
+   "file": "bodies/047.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body9",
+   "body": "Body9",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0018786357365473852,
+   "bounds_mm": [
+    [
+     186.4614486694336,
+     -72.91589736938477,
+     89.17203903198242
+    ],
+    [
+     189.89561080932617,
+     -69.4752836227417,
+     92.60900497436523
+    ]
+   ]
+  },
+  {
+   "file": "bodies/048.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body10",
+   "body": "Body10",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0015989526217279504,
+   "bounds_mm": [
+    [
+     185.5213737487793,
+     -68.38016510009766,
+     87.54974365234375
+    ],
+    [
+     188.95692825317383,
+     -64.94656562805176,
+     90.97929954528809
+    ]
+   ]
+  },
+  {
+   "file": "bodies/049.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017202565631520951,
+   "bounds_mm": [
+    [
+     186.09134674072266,
+     -63.613219261169434,
+     88.54155540466309
+    ],
+    [
+     189.52856063842773,
+     -60.173306465148926,
+     91.97654724121094
+    ]
+   ]
+  },
+  {
+   "file": "bodies/050.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 8.588058514019965e-05,
+   "bounds_mm": [
+    [
+     187.95900344848633,
+     -60.42655944824219,
+     91.77263259887695
+    ],
+    [
+     191.39324188232422,
+     -56.9880485534668,
+     95.20383834838867
+    ]
+   ]
+  },
+  {
+   "file": "bodies/051.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0006604865189838687,
+   "bounds_mm": [
+    [
+     190.40494918823242,
+     -60.04061222076416,
+     96.00330352783203
+    ],
+    [
+     193.83686065673828,
+     -56.60420894622803,
+     99.44314956665039
+    ]
+   ]
+  },
+  {
+   "file": "bodies/052.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 8490,
+   "frame": "context",
+   "placement_error_mm": 1.2680211609342897,
+   "bounds_mm": [
+    [
+     205.63018798828125,
+     -19.550812244415283,
+     149.6494960784912
+    ],
+    [
+     233.43915939331055,
+     21.01860284805298,
+     190.43167114257812
+    ]
+   ]
+  },
+  {
+   "file": "bodies/053.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Brass - Polished",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1492,
+   "frame": "context",
+   "placement_error_mm": 0.007475936318527807,
+   "bounds_mm": [
+    [
+     216.99583053588867,
+     2.0223604142665863,
+     171.53417587280273
+    ],
+    [
+     232.58649826049805,
+     17.852814197540283,
+     187.37537384033203
+    ]
+   ]
+  },
+  {
+   "file": "bodies/054.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1496,
+   "frame": "context",
+   "placement_error_mm": 1.7089209141277517,
+   "bounds_mm": [
+    [
+     142.41472244262695,
+     -83.00094604492188,
+     15.011481046676636
+    ],
+    [
+     205.9701156616211,
+     34.99277114868164,
+     112.62606620788574
+    ]
+   ]
+  },
+  {
+   "file": "bodies/055.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 620,
+   "frame": "context",
+   "placement_error_mm": 0.3385754444044188,
+   "bounds_mm": [
+    [
+     167.6114845275879,
+     -82.97928810119629,
+     85.70245742797852
+    ],
+    [
+     224.57542419433594,
+     4.126197695732117,
+     173.7999725341797
+    ]
+   ]
+  },
+  {
+   "file": "bodies/056.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 356,
+   "frame": "context",
+   "placement_error_mm": 0.007326781848154487,
+   "bounds_mm": [
+    [
+     181.75531387329102,
+     -73.5259485244751,
+     91.41261100769043
+    ],
+    [
+     191.84951782226562,
+     -58.540611267089844,
+     105.89630126953125
+    ]
+   ]
+  },
+  {
+   "file": "bodies/057.stl",
+   "key": "8308 Mount:2+ARM:1+Link1:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:2+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 384,
+   "frame": "context",
+   "placement_error_mm": 0.010863359414369918,
+   "bounds_mm": [
+    [
+     188.7354278564453,
+     -77.15308666229248,
+     82.28652954101562
+    ],
+    [
+     204.04762268066406,
+     -54.94980335235596,
+     103.95203590393066
+    ]
+   ]
+  },
+  {
+   "file": "bodies/058.stl",
+   "key": "8308 Mount:2+MagnetHolder:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:2+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "EPX 86FR (with Carbon M2 M3 L1 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 454,
+   "frame": "context",
+   "placement_error_mm": 0.5797898261213534,
+   "bounds_mm": [
+    [
+     186.6075897216797,
+     0.010500550270080566,
+     14.160938262939453
+    ],
+    [
+     198.35315704345703,
+     19.98949885368347,
+     26.504852771759033
+    ]
+   ]
+  },
+  {
+   "file": "bodies/059.stl",
+   "key": "8308 Mount:2+MagnetHolder:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:2+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 212,
+   "frame": "context",
+   "placement_error_mm": 2.8932617436554452e-06,
+   "bounds_mm": [
+    [
+     192.5798797607422,
+     6.830371618270874,
+     15.073808431625366
+    ],
+    [
+     198.5045051574707,
+     13.169628381729126,
+     22.160568237304688
+    ]
+   ]
+  },
+  {
+   "file": "bodies/060.stl",
+   "key": "8308 Mount:2+20210124-moteus-controller-r45-mechanical v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:2+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1424,
+   "frame": "context",
+   "placement_error_mm": 1.6949625810493962,
+   "bounds_mm": [
+    [
+     177.0906639099121,
+     -13.001401424407959,
+     -17.763006687164307
+    ],
+    [
+     213.58036041259766,
+     32.99999952316284,
+     31.712396144866943
+    ]
+   ]
+  },
+  {
+   "file": "bodies/061.stl",
+   "key": "8308 Mount:2/motor",
+   "body": "motor",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 396,
+   "frame": "context",
+   "placement_error_mm": 8.153364017183729e-06,
+   "bounds_mm": [
+    [
+     143.07154655456543,
+     -35.899999141693115,
+     -18.339627981185913
+    ],
+    [
+     213.65325927734375,
+     55.900001525878906,
+     75.41150093078613
+    ]
+   ]
+  },
+  {
+   "file": "bodies/062.stl",
+   "key": "8308 Mount:2/mount",
+   "body": "mount",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2146,
+   "frame": "context",
+   "placement_error_mm": 0.00041375840910628484,
+   "bounds_mm": [
+    [
+     125.70327758789062,
+     -47.5,
+     -30.55058479309082
+    ],
+    [
+     171.85457229614258,
+     67.5,
+     -2.100551128387451
+    ]
+   ]
+  },
+  {
+   "file": "bodies/063.stl",
+   "key": "8308 Mount:2/palte",
+   "body": "palte",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 968,
+   "frame": "context",
+   "placement_error_mm": 3.1221092465507103e-06,
+   "bounds_mm": [
+    [
+     160.70327758789062,
+     -17.5,
+     -32.13808536529541
+    ],
+    [
+     207.2028923034668,
+     37.5,
+     45.22663593292236
+    ]
+   ]
+  },
+  {
+   "file": "bodies/064.stl",
+   "key": "8308 Mount:2/MC mount",
+   "body": "MC mount",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2696,
+   "frame": "context",
+   "placement_error_mm": 0.0002721055685962337,
+   "bounds_mm": [
+    [
+     180.70289611816406,
+     -12.5,
+     -5.960209369659424
+    ],
+    [
+     208.61095428466797,
+     32.5,
+     34.978885650634766
+    ]
+   ]
+  },
+  {
+   "file": "bodies/065.stl",
+   "key": "8308 Mount:2/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 312,
+   "frame": "context",
+   "placement_error_mm": 0.002396220997705916,
+   "bounds_mm": [
+    [
+     -79.0719223022461,
+     -124.74777221679688,
+     -5.958264470100403
+    ],
+    [
+     -71.36557579040527,
+     -115.89417457580566,
+     2.0684731006622314
+    ]
+   ]
+  },
+  {
+   "file": "bodies/066.stl",
+   "key": "8308 Mount:2/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 312,
+   "frame": "context",
+   "placement_error_mm": 0.0023967610973105935,
+   "bounds_mm": [
+    [
+     -44.430909156799316,
+     -144.74777221679688,
+     -5.958264470100403
+    ],
+    [
+     -36.724557876586914,
+     -135.89417457580566,
+     2.0684731006622314
+    ]
+   ]
+  },
+  {
+   "file": "bodies/067.stl",
+   "key": "8308 Mount:2/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 312,
+   "frame": "context",
+   "placement_error_mm": 0.0023990004682281716,
+   "bounds_mm": [
+    [
+     -88.57192993164062,
+     -141.20224952697754,
+     26.950700283050537
+    ],
+    [
+     -80.86557388305664,
+     -132.3486614227295,
+     34.97744083404541
+    ]
+   ]
+  },
+  {
+   "file": "bodies/068.stl",
+   "key": "8308 Mount:2/Body14",
+   "body": "Body14",
+   "occurrence": "8308 Mount:2",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 312,
+   "frame": "context",
+   "placement_error_mm": 0.002395110620659918,
+   "bounds_mm": [
+    [
+     -53.930907249450684,
+     -161.2022590637207,
+     26.950700283050537
+    ],
+    [
+     -46.22456073760986,
+     -152.3486614227295,
+     34.97744083404541
+    ]
+   ]
+  },
+  {
+   "file": "bodies/069.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1362,
+   "frame": "context",
+   "placement_error_mm": 0.002954302080969305,
+   "bounds_mm": [
+    [
+     -138.16777229309082,
+     -107.32065200805664,
+     84.89226341247559
+    ],
+    [
+     -115.36154747009277,
+     -87.73755073547363,
+     107.34445571899414
+    ]
+   ]
+  },
+  {
+   "file": "bodies/070.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1014,
+   "frame": "context",
+   "placement_error_mm": 0.631553610792837,
+   "bounds_mm": [
+    [
+     -132.62957572937012,
+     -101.63521766662598,
+     90.6134033203125
+    ],
+    [
+     -118.67149353027344,
+     -90.04202842712402,
+     104.20398712158203
+    ]
+   ]
+  },
+  {
+   "file": "bodies/071.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1274,
+   "frame": "context",
+   "placement_error_mm": 0.6302598761504261,
+   "bounds_mm": [
+    [
+     -134.86945152282715,
+     -105.01900672912598,
+     88.03301811218262
+    ],
+    [
+     -119.46807861328125,
+     -90.62888145446777,
+     103.43179702758789
+    ]
+   ]
+  },
+  {
+   "file": "bodies/072.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0015445655573426012,
+   "bounds_mm": [
+    [
+     -125.5312728881836,
+     -104.43673133850098,
+     99.62869644165039
+    ],
+    [
+     -122.09381103515625,
+     -101.00188255310059,
+     103.0656623840332
+    ]
+   ]
+  },
+  {
+   "file": "bodies/073.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body5",
+   "body": "Body5",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.001918240904587599,
+   "bounds_mm": [
+    [
+     -129.9229621887207,
+     -102.98218727111816,
+     101.25840187072754
+    ],
+    [
+     -126.48926734924316,
+     -99.54925537109375,
+     104.68795776367188
+    ]
+   ]
+  },
+  {
+   "file": "bodies/074.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body6",
+   "body": "Body6",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017083206377945409,
+   "bounds_mm": [
+    [
+     -133.76620292663574,
+     -100.10556221008301,
+     100.26115417480469
+    ],
+    [
+     -130.33408164978027,
+     -96.66619300842285,
+     103.69614601135254
+    ]
+   ]
+  },
+  {
+   "file": "bodies/075.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body7",
+   "body": "Body7",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0015908550953855987,
+   "bounds_mm": [
+    [
+     -135.59343338012695,
+     -96.89445495605469,
+     97.03386306762695
+    ],
+    [
+     -132.1590805053711,
+     -93.46197128295898,
+     100.46507835388184
+    ]
+   ]
+  },
+  {
+   "file": "bodies/076.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body8",
+   "body": "Body8",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0016127469167315095,
+   "bounds_mm": [
+    [
+     -134.7078514099121,
+     -94.58682060241699,
+     92.79455184936523
+    ],
+    [
+     -131.27215385437012,
+     -91.14924430847168,
+     96.2343978881836
+    ]
+   ]
+  },
+  {
+   "file": "bodies/077.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body9",
+   "body": "Body9",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0015452459352872116,
+   "bounds_mm": [
+    [
+     -131.4413356781006,
+     -94.05632019042969,
+     89.17203903198242
+    ],
+    [
+     -128.00387382507324,
+     -90.62146186828613,
+     92.60900497436523
+    ]
+   ]
+  },
+  {
+   "file": "bodies/078.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body10",
+   "body": "Body10",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0019210930647849465,
+   "bounds_mm": [
+    [
+     -127.04586982727051,
+     -95.50894737243652,
+     87.54974365234375
+    ],
+    [
+     -123.61218452453613,
+     -92.07601547241211,
+     90.97929954528809
+    ]
+   ]
+  },
+  {
+   "file": "bodies/079.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0017066916797292431,
+   "bounds_mm": [
+    [
+     -123.20106506347656,
+     -98.39200019836426,
+     88.54155540466309
+    ],
+    [
+     -119.7689437866211,
+     -94.95264053344727,
+     91.97654724121094
+    ]
+   ]
+  },
+  {
+   "file": "bodies/080.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.001591123624330284,
+   "bounds_mm": [
+    [
+     -121.37606620788574,
+     -101.59623146057129,
+     91.77263259887695
+    ],
+    [
+     -117.94171333312988,
+     -98.16374778747559,
+     95.20383834838867
+    ]
+   ]
+  },
+  {
+   "file": "bodies/081.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1848,
+   "frame": "context",
+   "placement_error_mm": 0.0016129271740118788,
+   "bounds_mm": [
+    [
+     -122.26299285888672,
+     -103.90894889831543,
+     96.00330352783203
+    ],
+    [
+     -118.82729530334473,
+     -100.47138214111328,
+     99.44314956665039
+    ]
+   ]
+  },
+  {
+   "file": "bodies/082.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 8502,
+   "frame": "context",
+   "placement_error_mm": 2.0474803246697317,
+   "bounds_mm": [
+    [
+     -96.54443740844727,
+     -174.4683837890625,
+     149.6494960784912
+    ],
+    [
+     -66.68314456939697,
+     -134.9468231201172,
+     190.43167114257812
+    ]
+   ]
+  },
+  {
+   "file": "bodies/083.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "appearance": "Brass - Polished",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 1398,
+   "frame": "context",
+   "placement_error_mm": 0.006590078689254255,
+   "bounds_mm": [
+    [
+     -85.69869041442871,
+     -172.55565643310547,
+     171.5273666381836
+    ],
+    [
+     -69.83473300933838,
+     -156.67827606201172,
+     187.38195419311523
+    ]
+   ]
+  },
+  {
+   "file": "bodies/084.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1516,
+   "frame": "context",
+   "placement_error_mm": 2.5580774955105587,
+   "bounds_mm": [
+    [
+     -144.82443809509277,
+     -128.90783309936523,
+     15.011481046676636
+    ],
+    [
+     -20.677170753479004,
+     -83.43496322631836,
+     112.61007308959961
+    ]
+   ]
+  },
+  {
+   "file": "bodies/085.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 624,
+   "frame": "context",
+   "placement_error_mm": 1.2381444321551622,
+   "bounds_mm": [
+    [
+     -138.37261199951172,
+     -157.09885597229004,
+     85.72294235229492
+    ],
+    [
+     -75.8273696899414,
+     -73.69118690490723,
+     173.7999725341797
+    ]
+   ]
+  },
+  {
+   "file": "bodies/086.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1/Body3",
+   "body": "Body3",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 364,
+   "frame": "context",
+   "placement_error_mm": 3.947201487210825e-06,
+   "bounds_mm": [
+    [
+     -131.97325706481934,
+     -99.80733871459961,
+     91.41039848327637
+    ],
+    [
+     -117.16951370239258,
+     -87.64304161071777,
+     105.8991813659668
+    ]
+   ]
+  },
+  {
+   "file": "bodies/087.stl",
+   "key": "8308 Mount:3+ARM:1+Link1:1/Body4",
+   "body": "Body4",
+   "occurrence": "8308 Mount:3+ARM:1+Link1:1",
+   "component": "Link1",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 388,
+   "frame": "context",
+   "placement_error_mm": 3.288306640101217e-06,
+   "bounds_mm": [
+    [
+     -140.42179107666016,
+     -111.19503974914551,
+     82.28226661682129
+    ],
+    [
+     -118.30961227416992,
+     -92.86334991455078,
+     103.95530700683594
+    ]
+   ]
+  },
+  {
+   "file": "bodies/088.stl",
+   "key": "8308 Mount:3+MagnetHolder:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:3+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "EPX 86FR (with Carbon M2 M3 L1 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 406,
+   "frame": "context",
+   "placement_error_mm": 0.5443208826707566,
+   "bounds_mm": [
+    [
+     -72.27696895599365,
+     -145.98468780517578,
+     14.160938262939453
+    ],
+    [
+     -50.792341232299805,
+     -127.26556777954102,
+     26.504852771759033
+    ]
+   ]
+  },
+  {
+   "file": "bodies/089.stl",
+   "key": "8308 Mount:3+MagnetHolder:1/Body2",
+   "body": "Body2",
+   "occurrence": "8308 Mount:3+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 192,
+   "frame": "context",
+   "placement_error_mm": 0.0036581859030324617,
+   "bounds_mm": [
+    [
+     -66.63281440734863,
+     -142.6042938232422,
+     15.073808431625366
+    ],
+    [
+     -59.53885555267334,
+     -136.0252285003662,
+     22.15492010116577
+    ]
+   ]
+  },
+  {
+   "file": "bodies/090.stl",
+   "key": "8308 Mount:3+20210124-moteus-controller-r45-mechanical v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "8308 Mount:3+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1384,
+   "frame": "context",
+   "placement_error_mm": 2.050832308152067,
+   "bounds_mm": [
+    [
+     -89.73574638366699,
+     -163.4925651550293,
+     -17.763006687164307
+    ],
+    [
+     -39.465293884277344,
+     -116.8362045288086,
+     31.712396144866943
+    ]
+   ]
+  },
+  {
+   "file": "bodies/091.stl",
+   "key": "8308 Mount:3/motor",
+   "body": "motor",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Steel - Satin",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 360,
+   "frame": "context",
+   "placement_error_mm": 0.006973904543543896,
+   "bounds_mm": [
+    [
+     -102.02729225158691,
+     -165.4737091064453,
+     -18.320775032043457
+    ],
+    [
+     -6.978880763053894,
+     -83.40837478637695,
+     75.39265632629395
+    ]
+   ]
+  },
+  {
+   "file": "bodies/092.stl",
+   "key": "8308 Mount:3/mount",
+   "body": "mount",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 1722,
+   "frame": "context",
+   "placement_error_mm": 5.5760654784084345,
+   "bounds_mm": [
+    [
+     -91.77687644958496,
+     -134.20458793640137,
+     -30.55058479309082
+    ],
+    [
+     17.939612865447998,
+     -53.770132064819336,
+     -2.100551128387451
+    ]
+   ]
+  },
+  {
+   "file": "bodies/093.stl",
+   "key": "8308 Mount:3/palte",
+   "body": "palte",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Aluminum - Bead Blasted",
+   "rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "triangles": 924,
+   "frame": "context",
+   "placement_error_mm": 4.7735429001598355,
+   "bounds_mm": [
+    [
+     -86.82703018188477,
+     -155.6624698638916,
+     -32.13808536529541
+    ],
+    [
+     -21.85293436050415,
+     -95.39280891418457,
+     45.22663593292236
+    ]
+   ]
+  },
+  {
+   "file": "bodies/094.stl",
+   "key": "8308 Mount:3/MC mount",
+   "body": "MC mount",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 2268,
+   "frame": "context",
+   "placement_error_mm": 0.0020757827811965957,
+   "bounds_mm": [
+    [
+     -88.57010841369629,
+     -161.2017059326172,
+     -5.960209369659424
+    ],
+    [
+     -36.72070264816284,
+     -115.8979606628418,
+     34.978885650634766
+    ]
+   ]
+  },
+  {
+   "file": "bodies/095.stl",
+   "key": "8308 Mount:3/Body11",
+   "body": "Body11",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 2.6955193234588887e-06,
+   "bounds_mm": [
+    [
+     -44.423584938049316,
+     155.90497970581055,
+     -5.952314138412476
+    ],
+    [
+     -36.718337535858154,
+     164.75688934326172,
+     2.062523365020752
+    ]
+   ]
+  },
+  {
+   "file": "bodies/096.stl",
+   "key": "8308 Mount:3/Body12",
+   "body": "Body12",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 2.226721823243203e-06,
+   "bounds_mm": [
+    [
+     -79.06460285186768,
+     135.90497970581055,
+     -5.952314138412476
+    ],
+    [
+     -71.35935306549072,
+     144.75689888000488,
+     2.062523365020752
+    ]
+   ]
+  },
+  {
+   "file": "bodies/097.stl",
+   "key": "8308 Mount:3/Body13",
+   "body": "Body13",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 2.3530154794082323e-06,
+   "bounds_mm": [
+    [
+     -53.9235782623291,
+     172.35946655273438,
+     26.956651210784912
+    ],
+    [
+     -46.218342781066895,
+     181.21137619018555,
+     34.971489906311035
+    ]
+   ]
+  },
+  {
+   "file": "bodies/098.stl",
+   "key": "8308 Mount:3/Body14",
+   "body": "Body14",
+   "occurrence": "8308 Mount:3",
+   "component": "8308 Mount",
+   "appearance": "Tough 2000 (with Formlabs SLA 3D Printers)",
+   "rgba": [
+    0.24705882352941178,
+    0.24705882352941178,
+    0.24705882352941178,
+    1.0
+   ],
+   "triangles": 276,
+   "frame": "context",
+   "placement_error_mm": 2.8007476598549475e-06,
+   "bounds_mm": [
+    [
+     -88.56459617614746,
+     152.35946655273438,
+     26.956651210784912
+    ],
+    [
+     -80.85935592651367,
+     161.21137619018555,
+     34.971489906311035
+    ]
+   ]
+  },
+  {
+   "file": "bodies/099.stl",
+   "key": "91290A210_Alloy Steel Socket Head Screw v1:1/Body1",
+   "body": "Body1",
+   "occurrence": "91290A210_Alloy Steel Socket Head Screw v1:1",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 17654,
+   "frame": "context",
+   "placement_error_mm": 1.3847734305648762,
+   "bounds_mm": [
+    [
+     193.75225067138672,
+     3.4454381465911865,
+     167.03332901000977
+    ],
+    [
+     239.95210647583008,
+     16.444212198257446,
+     199.5082664489746
+    ]
+   ]
+  },
+  {
+   "file": "bodies/100.stl",
+   "key": "91290A210_Alloy Steel Socket Head Screw v1:2/Body1",
+   "body": "Body1",
+   "occurrence": "91290A210_Alloy Steel Socket Head Screw v1:2",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 17638,
+   "frame": "context",
+   "placement_error_mm": 1.9708089193137486,
+   "bounds_mm": [
+    [
+     -89.42630767822266,
+     -179.01948928833008,
+     167.11458206176758
+    ],
+    [
+     -59.79269504547119,
+     -136.89642906188965,
+     199.5911979675293
+    ]
+   ]
+  },
+  {
+   "file": "bodies/101.stl",
+   "key": "91290A210_Alloy Steel Socket Head Screw v1:3/Body1",
+   "body": "Body1",
+   "occurrence": "91290A210_Alloy Steel Socket Head Screw v1:3",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "appearance": "Powder Coat - Rough (Black)",
+   "rgba": [
+    0.09803921568627451,
+    0.09803921568627451,
+    0.09803921568627451,
+    1.0
+   ],
+   "triangles": 17638,
+   "frame": "context",
+   "placement_error_mm": 1.9860671772364742,
+   "bounds_mm": [
+    [
+     -89.39798355102539,
+     157.07823753356934,
+     167.03332901000977
+    ],
+    [
+     -59.82396125793457,
+     199.19370651245117,
+     199.50994491577148
+    ]
+   ]
+  }
+ ],
+ "hidden": [
+  "Body9",
+  "Body11",
+  "Body16",
+  "Body22",
+  "Body24",
+  "Body26",
+  "8308 Mount:1/Body2",
+  "8308 Mount:1/Body3",
+  "8308 Mount:1/coupler",
+  "8308 Mount:1/Body15",
+  "Base 8308:1+Basler dart USB3 bare board IMX548 v01:1/Body1",
+  "Base 8308:1+Basler dart USB3 cover gen2 v01:1/Body1",
+  "8308 Mount:2/Body2",
+  "8308 Mount:2/Body3",
+  "8308 Mount:2/coupler",
+  "8308 Mount:2/Body15",
+  "8308 Mount:3/Body2",
+  "8308 Mount:3/Body3",
+  "8308 Mount:3/coupler",
+  "8308 Mount:3/Body15"
+ ],
+ "failed": [],
+ "occurrences": [
+  {
+   "path": "8308 Mount:1+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.49616887131631365,
+     -0.752539999692171,
+     0.433012701892224,
+     4.941726792720492
+    ],
+    [
+     0.6614222369461001,
+     0.004541417534334614,
+     -0.7499999999999988,
+     193.57847327715942
+    ],
+    [
+     0.5624385082921636,
+     0.6585308833988622,
+     0.4999999999999995,
+     96.1188520925229
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.49616887131631365,
+     -0.7525399996921699,
+     0.4330127018922236,
+     -64.86849161489528
+    ],
+    [
+     0.6614222369461,
+     0.004541417534334739,
+     -0.7499999999999978,
+     184.60370878059285
+    ],
+    [
+     0.5624385082921634,
+     0.6585308833988615,
+     0.4999999999999988,
+     168.2578779324091
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1+ARM:1+Link1:1",
+   "component": "Link1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.49616887131631365,
+     -0.752539999692171,
+     0.433012701892224,
+     -48.324645517046264
+    ],
+    [
+     0.6614222369461001,
+     0.004541417534334614,
+     -0.7499999999999988,
+     133.75734333254942
+    ],
+    [
+     0.5624385082921636,
+     0.6585308833988622,
+     0.4999999999999995,
+     35.66093876330653
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1+ARM:1",
+   "component": "ARM",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.9999999999999996,
+     -3.330669073875468e-16,
+     -1.9721522630525295e-31,
+     -1.7763568394002505e-14
+    ],
+    [
+     5.551115123125786e-17,
+     0.9999999999999996,
+     -2.9582283945787943e-31,
+     89.99999999999999
+    ],
+    [
+     -6.162975822039155e-32,
+     0.0,
+     1.0,
+     70.0
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.25000000000000283,
+     -0.8660254037844354,
+     -0.4330127018922239,
+     -60.66550752097459
+    ],
+    [
+     -0.4330127018922172,
+     -0.5000000000000053,
+     0.7499999999999978,
+     155.1323433325493
+    ],
+    [
+     -0.8660254037844388,
+     -5.273559366969494e-16,
+     -0.49999999999999956,
+     21.41093876330656
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.8660161802121659,
+     -0.43301270189222413,
+     0.2500319491799451,
+     -67.24299251712809
+    ],
+    [
+     -0.5000159743347867,
+     0.7499999999999967,
+     -0.4329942556316862,
+     166.5287654813592
+    ],
+    [
+     -3.194935006944825e-05,
+     -0.5000000000000002,
+     -0.8660254031951009,
+     23.0515030107057
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:1",
+   "component": "8308 Mount",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.5000000000000054,
+     -0.8660254037844358,
+     -2.257631469608658e-16,
+     34.68612882473133
+    ],
+    [
+     0.8660254037844357,
+     -0.5000000000000052,
+     -7.077671781985371e-16,
+     9.97846459695758
+    ],
+    [
+     4.812746302084064e-16,
+     -3.459483148598366e-16,
+     0.9999999999999999,
+     -10.000000064523636
+    ]
+   ]
+  },
+  {
+   "path": "Base 8308:1+Basler dart USB3 bare board IMX548 v01:1",
+   "component": "Basler dart USB3 bare board IMX548 v01",
+   "visible": false,
+   "transform_mm": [
+    [
+     1.0,
+     0.0,
+     -2.465190328815599e-32,
+     -3.701483564100272e-12
+    ],
+    [
+     0.0,
+     1.0,
+     1.7858547661176155e-15,
+     -0.0623842578111411
+    ],
+    [
+     0.0,
+     -1.7858547661176155e-15,
+     1.0,
+     8.942084426294304
+    ]
+   ]
+  },
+  {
+   "path": "Base 8308:1+Basler dart USB3 cover gen2 v01:1",
+   "component": "Basler dart USB3 cover gen2 v01",
+   "visible": false,
+   "transform_mm": [
+    [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     -1.0000000000000009,
+     -1.3877787807814457e-15,
+     -0.06238425796184721
+    ],
+    [
+     0.0,
+     1.3877787807814457e-15,
+     -1.0000000000000009,
+     9.139466731463504
+    ]
+   ]
+  },
+  {
+   "path": "Base 8308:1",
+   "component": "Base 8308",
+   "visible": true,
+   "transform_mm": [
+    [
+     1.0,
+     0.0,
+     0.0,
+     23.15789473684211
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     9.999999999999991
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -33.175
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.32472402416509183,
+     0.380202982800015,
+     -0.8660254037844396,
+     191.19498070653916
+    ],
+    [
+     -0.7604059656000297,
+     0.6494480483301841,
+     -1.0061396160665481e-16,
+     -66.040596560003
+    ],
+    [
+     0.5624385082921629,
+     0.658530883398862,
+     0.5000000000000007,
+     96.11885209252243
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.3247240241650918,
+     0.38020298280001463,
+     -0.8660254037844383,
+     218.3277158633382
+    ],
+    [
+     -0.7604059656000298,
+     0.6494480483301832,
+     -9.497611030973019e-17,
+     -1.0957917269845827
+    ],
+    [
+     0.5624385082921628,
+     0.6585308833988613,
+     0.4999999999999997,
+     168.25787793240858
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+ARM:1+Link1:1",
+   "component": "Link1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.32472402416509183,
+     0.380202982800015,
+     -0.8660254037844396,
+     166.02154864630063
+    ],
+    [
+     -0.7604059656000297,
+     0.6494480483301841,
+     -1.0061396160665481e-16,
+     9.999999999999957
+    ],
+    [
+     0.5624385082921629,
+     0.658530883398862,
+     0.5000000000000007,
+     35.66093876330614
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+ARM:1",
+   "component": "ARM",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.5000000000000048,
+     0.8660254037844353,
+     7.776185389606137e-16,
+     103.96425495967208
+    ],
+    [
+     -0.866025403784435,
+     -0.5000000000000048,
+     -5.49400209605701e-16,
+     -9.971698980364769
+    ],
+    [
+     7.981516411731628e-17,
+     -8.301405491853046e-16,
+     1.0000000000000002,
+     69.99999999999973
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.49999999999999983,
+     -5.551115123125783e-17,
+     0.8660254037844385,
+     190.70327265415722
+    ],
+    [
+     0.0,
+     0.9999999999999994,
+     -5.551115123125783e-17,
+     10.0
+    ],
+    [
+     -0.8660254037844379,
+     -5.551115123125783e-17,
+     -0.5000000000000006,
+     21.410938763306145
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     -1.844596586034761e-05,
+     0.8660254037844385,
+     -0.4999999996597465,
+     203.8602563568383
+    ],
+    [
+     0.9999999993194912,
+     -2.7755575615628914e-17,
+     -3.689193172104477e-05,
+     9.999741742867911
+    ],
+    [
+     -3.1949350065202387e-05,
+     -0.5000000000000002,
+     -0.8660254031951018,
+     23.05150301070573
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:2",
+   "component": "8308 Mount",
+   "visible": true,
+   "transform_mm": [
+    [
+     1.0,
+     -9.860761315262648e-32,
+     2.7755575615628914e-16,
+     17.320508038435865
+    ],
+    [
+     -9.860761315262646e-32,
+     1.0,
+     -1.4791141972893971e-31,
+     -8.881784197001252e-15
+    ],
+    [
+     -2.7755575615628914e-16,
+     1.9721522630525295e-31,
+     1.0,
+     -10.000000064523862
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+ARM:1+Link1:1+5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing:1",
+   "component": "5908K14_Ultra-Corrosion-Resistant Stainless Steel Ball Bearing",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.8208928954814132,
+     0.37233701689215926,
+     0.4330127018922088,
+     -126.7675728382872
+    ],
+    [
+     0.09898372865392627,
+     -0.6539894658645197,
+     0.7500000000000054,
+     -97.52910017175861
+    ],
+    [
+     0.5624385082921594,
+     0.6585308833988663,
+     0.5000000000000014,
+     96.11885209252233
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+ARM:1+Link1:1+59935K431_Ball Joint Rod End v1:1",
+   "component": "59935K431_Ball Joint Rod End v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.820892895481413,
+     0.3723370168921586,
+     0.43301270189220825,
+     -84.0900895874702
+    ],
+    [
+     0.09898372865392632,
+     -0.6539894658645188,
+     0.7500000000000042,
+     -153.4991405082105
+    ],
+    [
+     0.5624385082921592,
+     0.6585308833988655,
+     0.5000000000000007,
+     168.25787793240892
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+ARM:1+Link1:1",
+   "component": "Link1",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.8208928954814132,
+     0.37233701689215926,
+     0.4330127018922088,
+     -48.327768468281164
+    ],
+    [
+     0.09898372865392627,
+     -0.6539894658645197,
+     0.7500000000000054,
+     -113.74856678715128
+    ],
+    [
+     0.5624385082921594,
+     0.6585308833988663,
+     0.5000000000000014,
+     35.66093876330637
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+ARM:1",
+   "component": "ARM",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.5000000000000067,
+     -0.8660254037844346,
+     -1.4992635049669684e-15,
+     -34.59512029869945
+    ],
+    [
+     0.8660254037844344,
+     -0.5000000000000067,
+     -9.771564492538982e-16,
+     -50.01952447423675
+    ],
+    [
+     2.2257856353755963e-16,
+     -1.987903682357536e-15,
+     1.0000000000000004,
+     70.00000000000001
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+MagnetHolder:1",
+   "component": "MagnetHolder",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.24999999999999473,
+     0.8660254037844455,
+     -0.43301270189220875,
+     -60.66863047220913
+    ],
+    [
+     0.43301270189222346,
+     -0.4999999999999879,
+     -0.7500000000000054,
+     -135.1235667871515
+    ],
+    [
+     -0.8660254037844378,
+     -9.71445146547012e-17,
+     -0.5000000000000016,
+     21.410938763306298
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3+20210124-moteus-controller-r45-mechanical v1:1",
+   "component": "20210124-moteus-controller-r45-mechanical v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.8660346261780301,
+     -0.4330127018922243,
+     0.24996805047980888,
+     -67.24812917874016
+    ],
+    [
+     -0.4999840249847182,
+     -0.7499999999999976,
+     0.4330311475634126,
+     -146.5197306788279
+    ],
+    [
+     -3.194935006812453e-05,
+     -0.500000000000001,
+     -0.8660254031951025,
+     23.051503010705275
+    ]
+   ]
+  },
+  {
+   "path": "8308 Mount:3",
+   "component": "8308 Mount",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.49999999999998834,
+     0.8660254037844459,
+     -7.734375752017756e-16,
+     17.362497797805034
+    ],
+    [
+     -0.8660254037844457,
+     -0.4999999999999883,
+     -8.187894806610532e-16,
+     20.03031194844194
+    ],
+    [
+     -1.3515897407586272e-15,
+     4.552448359575671e-16,
+     1.0000000000000002,
+     -10.00000006452348
+    ]
+   ]
+  },
+  {
+   "path": "Arm:1",
+   "component": "Arm",
+   "visible": true,
+   "transform_mm": [
+    [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     0.0
+    ]
+   ]
+  },
+  {
+   "path": "91290A210_Alloy Steel Socket Head Screw v1:1",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.3247240241650917,
+     -0.3802029828000146,
+     0.8660254037844383,
+     216.13091253309398
+    ],
+    [
+     -0.7604059656000298,
+     -0.6494480483301841,
+     2.914335439641036e-16,
+     9.944825094628625
+    ],
+    [
+     0.5624385082921628,
+     -0.6585308833988621,
+     -0.49999999999999967,
+     184.45290295018918
+    ]
+   ]
+  },
+  {
+   "path": "91290A210_Alloy Steel Socket Head Screw v1:2",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     -0.82089289548141,
+     -0.37233701689216003,
+     -0.43301270189220875,
+     -73.35986871732385
+    ],
+    [
+     0.09898372865392524,
+     0.6539894658645167,
+     -0.7500000000000049,
+     -156.99508642790735
+    ],
+    [
+     0.5624385082921564,
+     -0.658530883398864,
+     -0.5000000000000011,
+     184.5341529501897
+    ]
+   ]
+  },
+  {
+   "path": "91290A210_Alloy Steel Socket Head Screw v1:3",
+   "component": "91290A210_Alloy Steel Socket Head Screw v1",
+   "visible": true,
+   "transform_mm": [
+    [
+     0.496168871316313,
+     0.7525399996921696,
+     -0.4330127018922235,
+     -73.33154459073997
+    ],
+    [
+     0.6614222369460981,
+     -0.004541417534334957,
+     0.7499999999999978,
+     177.18091287867668
+    ],
+    [
+     0.5624385082921625,
+     -0.6585308833988631,
+     -0.4999999999999988,
+     184.45290295018958
+    ]
+   ]
+  }
+ ],
+ "joints": [
+  {
+   "name": "Revolute 1",
+   "as_built": false,
+   "type": 1,
+   "occurrenceOne": "",
+   "occurrenceTwo": "",
+   "axis": [
+    0.8660254037844386,
+    -3.3306690738754706e-16,
+    -0.5000000000000002
+   ],
+   "error": "RuntimeError: 2 : InternalValidationError : Xl::Utils::findObjectPath(entity, objPath)"
+  },
+  {
+   "name": "Revolute 2",
+   "as_built": false,
+   "type": 1,
+   "occurrenceOne": "",
+   "occurrenceTwo": "",
+   "axis": [
+    -1.699028829953153e-14,
+    0.9999999999999979,
+    6.522560269672795e-15
+   ],
+   "error": "RuntimeError: 2 : InternalValidationError : Xl::Utils::findObjectPath(entity, objPath)"
+  }
+ ]
+}
