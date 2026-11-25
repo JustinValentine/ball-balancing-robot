@@ -112,12 +112,14 @@ The songs are twinkle, ode, mary, jingle and shave. Each note is one bounce and 
 This branch juggles two balls in two columns 90 mm apart, striking them in turn. Each strike sends its ball to its own slot on a shared beat, half a flight after the other ball, so the two stay alternating. Start one ball bouncing with k, then drop the second one in by hand over the right-hand column.
 
 ```sh
-python3 simulate.py control --mode juggle --apex-mm 200      # drops the second ball after 6 s
+python3 simulate.py control --mode juggle                    # drops the second ball after 6 s
 mjpython simulate.py control --view --mode juggle            # second ball drops in by itself
 python3 tests/test_two_balls.py build/ball-vision            # two-ball stereo tracking
 ```
 
-On the robot the tracker has to report both balls, so set `balls: 2` in tracker.yml. While juggling the plate doesn't stop between strikes. It swings straight from one strike into the next, so the motors see a smooth wave of torque instead of a stop and start every 200 ms. In simulation all 61 test drops turned into steady juggling at a 200 mm apex, with strikes every 200 ms.
+On the robot the tracker has to report both balls, so set `balls: 2` in tracker.yml. It juggles at juggle_apex_mm (400 mm by default, 450 at most), which k also sets on the robot. It starts at 250 mm, where catching the dropped ball is easier, and climbs to the set height after 3 s. Higher throws mean fewer, bigger strokes: at 400 mm the cranks swing about 0.4 rad per strike, roughly 3.5 times a second, against 0.15 rad 5 times a second at 200 mm. Above 450 mm a late ball can't be thrown high enough to catch up, so the balls fall into step.
+
+While juggling the plate doesn't stop between strikes. It swings straight from one strike into the next, so the motors see a smooth wave of torque, peaking around 1.2 N m. In simulation 45 of 48 random drops turned into steady juggling at 400 mm, and all 61 at 200 mm.
 
 ### Gravity calibration
 

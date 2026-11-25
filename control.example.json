@@ -51,6 +51,7 @@
   },
   "bounce": {
     "apex_mm": 100,
+    "juggle_apex_mm": 400,
     "stroke_time_s": 0.08,
     "decel_g": 1.5,
     "return_time_s": 0.15,

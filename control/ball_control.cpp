@@ -420,7 +420,7 @@ int run(int argc, char** argv) {
         switch (k) {
           case 'h': ctl.set_mode(kHold); break;
           case 'b': ctl.set_mode(kBalance); break;
-          case 'k': ctl.set_mode(kJuggle); break;
+          case 'k': ctl.set_mode(kJuggle); apex = cfg.juggle_apex; break;
           case 'j': ctl.set_mode(kBounce); break;
           case 'w': ty += 0.005; break;
           case 's': ty -= 0.005; break;

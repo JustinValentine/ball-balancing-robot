@@ -22,6 +22,11 @@ namespace ballctl {
 
 constexpr double kPi = 3.14159265358979323846;
 constexpr double kG = 9.80665;
+constexpr double kApexMax = 0.5;  // Highest bounce asked for, m.
+// Juggling starts at this apex, holds it for kJuggleSettle s, then climbs to the set apex (m/s).
+constexpr double kJuggleStartApex = 0.25, kJuggleSettle = 3.0, kJuggleClimb = 0.03;
+// Above this the throws can't be stretched enough to keep the balls apart.
+constexpr double kJuggleApexMax = 0.45;
 
 // ---------------------------------------------------------------- small linear algebra
 
@@ -559,7 +564,7 @@ struct Config {
   // Bouncing.
   double stroke_time = 0.08, decel = 1.5*kG, return_time = 0.15, hold_window = 0.015, freeze = 0.025,
          plate_speed_max = 0.8, lateral_gain = 0.7, lateral_integral = 0.15, launch_speed = 0.6,
-         launch_dip = 0.012, apex_default = 0.10;
+         launch_dip = 0.012, apex_default = 0.10, juggle_apex = 0.40;
 
   static Config load(const std::string& path, Json* platform_out) {
     const Json j = Json::load(path);
@@ -633,6 +638,7 @@ struct Config {
     c.launch_speed = bo.get("launch_speed_m_s", c.launch_speed);
     c.launch_dip = bo.get("launch_dip_mm", 18)*1e-3;
     c.apex_default = bo.get("apex_mm", 100)*1e-3;
+    c.juggle_apex = std::min(bo.get("juggle_apex_mm", 400)*1e-3, kJuggleApexMax);
     return c;
   }
 };

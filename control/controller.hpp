@@ -589,7 +589,7 @@ class Controller {
     const double r = std::hypot(x, y), s = r > c_.target_radius ? c_.target_radius/r : 1;
     target_ = {centre_[0]+x*s, centre_[1]+y*s, 0};
   }
-  void set_apex(double h) { apex_ = std::clamp(h, 0.0, 0.5); }
+  void set_apex(double h) { apex_ = std::clamp(h, 0.0, kApexMax); }
   // Roll the ball round a circle while balancing, or hop round it while bouncing. Radius in m
   // about the current target; zero stops. Period is one lap in seconds, lengthened if the tilt
   // limit cannot hold the ball on the circle.
@@ -975,6 +975,7 @@ class Controller {
       if (flying && valid2_ && !resting) {
         if (phase_ != kJuggling) {
           grid_t0_ = -1;
+          juggle_since_ = now;
           strike_t_[0] = strike_t_[1] = 0;
           flight_err_[0] = flight_err_[1] = 0;
         }
@@ -1096,13 +1097,16 @@ class Controller {
     if (now < lock_until_) return;
     if (plan_.valid && plan_.t-now < c_.freeze) return;
     const Ball* balls[2] = {&b0, &ball2_};
-    const double T0 = flight_time(launch_speed(apex_, c_.drag), c_.drag), half = 0.5*T0;
+    // Start low, where the hand-off is forgiving, and raise the throws once both balls alternate.
+    const double top = std::min(apex_, kJuggleApexMax), start = std::min(top, kJuggleStartApex);
+    const double apex = std::min(top, start+kJuggleClimb*std::max(0.0, now-juggle_since_-kJuggleSettle));
+    const double T0 = flight_time(launch_speed(apex, c_.drag), c_.drag), half = 0.5*T0;
     ImpactPlan next[2];
     for (int k = 0; k < 2; k++) {
       if (balls[k]->contact) continue;
       target_ = column(k);
       for (int a = 0; a < 2; a++) bias_[a] = juggle_bias_[k][a];
-      next[k] = plan_impact(now, *balls[k], apex_);
+      next[k] = plan_impact(now, *balls[k], apex);
       if (next[k].valid && (next[k].t < now+0.03 || next[k].t > now+1.2)) next[k].valid = false;
     }
     // Keep refining the planned strike; switch only if the other ball clearly lands first and
@@ -1120,6 +1124,13 @@ class Controller {
     if (grid_t0_ < 0) {
       grid_t0_ = next[A].t;
       grid_owner_ = A;
+      grid_half_ = half;
+    }
+    // As the throws climb the beat slows. Move the grid's origin up to its latest slot first, so
+    // the change stretches only the slots ahead instead of shifting all of them.
+    if (half != grid_half_) {
+      grid_t0_ += 2*grid_half_*std::max(0.0, std::floor((now-grid_t0_)/(2*grid_half_)));
+      grid_half_ = half;
     }
     // The other ball lands too soon after this strike to get one of its own, so it will rebound
     // off the plate unforced. Predict that rebound and move the grid onto it: the other ball is
@@ -1128,14 +1139,18 @@ class Controller {
     if (B_soon) {
       const double vin = std::max(0.0, -next[1-A].v_in[2]);
       grid_t0_ = next[1-A].t+flight_time(est_.restitution()*vin, c_.drag);
+      grid_half_ = half;
       grid_owner_ = 1-A;
     }
     // This ball's own slots are grid_t0 + (2m + parity) * half; aim for the one nearest a full flight.
     const double parity = A == grid_owner_ ? 0 : 1;
     const double m = std::round((next[A].t+T0-grid_t0_-parity*half)/(2*half));
     const double slot = grid_t0_+(2*m+parity)*half;
-    const double T = std::clamp(slot-next[A].t, 0.6*T0, 1.4*T0);
-    const double asked = std::clamp(T-flight_err_[A], 0.5*T0, 1.5*T0);
+    // Throws stay within what the strike can reach: no higher than the bounce limit, or a
+    // stretched throw saturates the stroke and spoils the aim.
+    const double T_hi = std::min(1.4*T0, flight_time(launch_speed(kApexMax, c_.drag), c_.drag));
+    const double T = std::clamp(slot-next[A].t, 0.6*T0, T_hi);
+    const double asked = std::clamp(T-flight_err_[A], 0.5*T0, std::max(T_hi, 0.5*T0));
     target_ = column(A);
     for (int a = 0; a < 2; a++) bias_[a] = juggle_bias_[A][a];
     ImpactPlan p = plan_impact(now, *balls[A], apex_for_flight(asked, c_.drag));
@@ -1317,7 +1332,7 @@ class Controller {
   V3 juggle_centre_{0, 0, 0};
   double juggle_half_ = 0.045, juggle_bias_[2][2] = {{0, 0}, {0, 0}};
   int plan_ball_ = 0, grid_owner_ = 0;
-  double grid_t0_ = -1, strike_t_[2] = {0, 0}, asked_[2] = {0, 0}, flight_err_[2] = {0, 0};
+  double juggle_since_ = 0, grid_t0_ = -1, grid_half_ = 0, strike_t_[2] = {0, 0}, asked_[2] = {0, 0}, flight_err_[2] = {0, 0};
   int request_ = kHold, phase_ = kLevel;
   ImpactPlan plan_;
   Output last_;

@@ -135,6 +135,8 @@ def control(args, cfg):
     plant = Plant(restitution=args.restitution, vision_latency=args.latency_ms/1000, seed=args.seed,
                   kp=args.kp, kd=args.kd, payload=(args.payload_g/1000, (.06, .02, .01)))
     juggle = args.mode == "juggle"
+    if args.apex_mm is None:
+        args.apex_mm = 400 if juggle else 100
     sim = ControlSim(args.config, plant, parts, balls=2 if juggle else 1)
     sim.start(ball_offset=(args.ball_x_mm/1000, args.ball_y_mm/1000))
     if args.calibrate:
@@ -198,7 +200,7 @@ def control(args, cfg):
                 while pending:
                     what, value = pending.pop(0)
                     if what == "drop":
-                        sim.drop_second((.045, 0), args.apex_mm/1000)
+                        sim.drop_second((.045, 0), .25)
                     elif what == "circle":
                         sim.circle(max(args.circle_mm, 60)/1000 if value else 0, args.lap)
                     elif what == "song":
@@ -221,7 +223,7 @@ def control(args, cfg):
                     contact = sim.log.contact[-12:]
                     leaving = len(contact) > 1 and contact[0] and not contact[-1]
                     if lost and bouncing_since is not None and sim.data.time-bouncing_since > 3 and leaving:
-                        sim.drop_second((.045, 0), args.apex_mm/1000)
+                        sim.drop_second((.045, 0), .25)
                         print(f"{sim.data.time-sim_start:7.2f} s  second ball dropped")
                 notes = len(sim.log.notes)
                 sim.run(.01)
@@ -238,7 +240,7 @@ def control(args, cfg):
     if juggle:
         # Let the first ball settle into its column, then drop the second like a hand would.
         sim.run(args.drop_s)
-        sim.drop_second((.045, 0), args.apex_mm/1000)
+        sim.drop_second((.045, 0), .25)
         dropped = sim.data.time
         sim.run(args.seconds)
         log = sim.log.arrays()
@@ -336,7 +338,7 @@ def main():
     run=sub.add_parser("control",help="Run the C++ ball controller on the simulated robot")
     run.add_argument("--config",type=Path,default=ROOT/"control.example.json")
     run.add_argument("--mode",choices=("hold","balance","bounce","juggle"),default="balance")
-    run.add_argument("--apex-mm",type=float,default=100)
+    run.add_argument("--apex-mm",type=float,help="Bounce height (default 100, or 400 when juggling)")
     run.add_argument("--seconds",type=float,default=15,help="Headless run length")
     run.add_argument("--view",action="store_true",help="Open the viewer and run in real time")
     run.add_argument("--no-cad",action="store_true")
