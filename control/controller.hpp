@@ -3,6 +3,7 @@
 
 #include "ballctl.hpp"
 #include "gravity.hpp"
+#include "songs.hpp"
 
 namespace ballctl {
 
@@ -481,8 +482,21 @@ inline double flight_time(double v0, double drag) {
   return vt/kG*std::atan(v0/vt)+vt/kG*std::acosh(std::exp(kG*h/(vt*vt)));
 }
 
+// Apex that gives a flight of duration T back to the same height.
+inline double apex_for_flight(double T, double drag) {
+  double lo = 0.05, hi = 8;
+  for (int i = 0; i < 60; i++) {
+    const double mid = 0.5*(lo+hi);
+    (flight_time(mid, drag) < T ? lo : hi) = mid;
+  }
+  const double v = 0.5*(lo+hi), vt2 = kG/drag;
+  return vt2/(2*kG)*std::log(1+v*v/vt2);
+}
+
 struct ImpactPlan {
   bool valid = false, saturated = false;
+  double apex = 0;    // Apex the rebound was planned for.
+  double flight = 0;  // Flight time the rebound was planned for (songs), s.
   double t = 0, yaw = 0, yaw_pre = 0, nx = 0, ny = 0, yaw_rate = 0, surface_speed = 0;
   V3 p_in{}, v_in{}, v_out{};
 };
@@ -502,6 +516,9 @@ struct Output {
   double yaw = 0, nx = 0, ny = 0;
   double next_impact = 0, restitution = 0, apex = 0;
   V3 plate_normal{0, 0, 1};
+  int note = 0, note_index = -1;  // MIDI note of a song impact that just happened, else 0.
+  double note_time = 0;           // When that impact was planned to happen.
+  double note_beat = 0;           // When the song's schedule wanted it.
 };
 
 class Controller {
@@ -561,6 +578,35 @@ class Controller {
     target_ = {centre_[0]+x*s, centre_[1]+y*s, 0};
   }
   void set_apex(double h) { apex_ = std::clamp(h, 0.0, 0.5); }
+  // Roll the ball round a circle while balancing, or hop round it while bouncing. Radius in m
+  // about the current target; zero stops. Period is one lap in seconds, lengthened if the tilt
+  // limit cannot hold the ball on the circle.
+  void set_circle(double radius, double period) {
+    if (radius <= 0) {
+      if (circle_r_ > 0) {
+        bal_.clear_path();
+        target_ = circle_centre_;
+      }
+      circle_r_ = 0;
+      return;
+    }
+    if (circle_r_ <= 0) circle_centre_ = target_;
+    circle_r_ = std::min(radius, c_.target_radius-std::hypot(circle_centre_[0]-centre_[0], circle_centre_[1]-centre_[1]));
+    const double amax = 0.6*0.8*kG*c_.rolling_gain*c_.tilt_max;
+    circle_period_ = std::max(period, 2*kPi*std::sqrt(circle_r_/amax));
+    circle_start_ = -1;
+  }
+
+  // Bounce to a song from songs(); -1 stops. beat <= 0 keeps the song's own tempo.
+  void set_song(int index, double beat) {
+    song_ = index >= 0 && index < static_cast<int>(songs().size()) ? index : -1;
+    song_started_ = false;
+    flight_error_.clear();
+    last_flight_ = 0;
+    if (song_ >= 0) song_beat_ = beat > 0 ? beat : songs()[song_].beat;
+  }
+  int song() const { return song_; }
+
   // Balance along a path (relative to the plate centre): position, velocity and acceleration.
   void set_path(const double* x, const double* v, const double* a) {
     const double p[2] = {centre_[0]+x[0], centre_[1]+x[1]};
@@ -608,6 +654,7 @@ class Controller {
       const PlateState now_plate = history_.at(now);
       const V3 ndt = cross(now_plate.w, now_plate.n);
       const double tilt[2] = {now_plate.n[0], now_plate.n[1]}, tilt_rate[2] = {ndt[0], ndt[1]};
+      if (circle_r_ > 0) circle_path(now);
       bal_.step(target_, b.p, b.v, tilt, tilt_rate, n, nd, na);
       // Balancing tilts are slow; the plate's tilt inertia torque is negligible and its
       // feedforward mostly passes camera noise to the motors.
@@ -632,6 +679,13 @@ class Controller {
     out.next_impact = plan_.valid ? plan_.t : 0;
     out.restitution = est_.restitution();
     out.apex = apex_;
+    if (note_.first) {
+      out.note = note_.first;
+      out.note_index = note_index_;
+      out.note_time = note_.second;
+      out.note_beat = note_beat_;
+      note_.first = 0;
+    }
     return out;
   }
 
@@ -765,6 +819,7 @@ class Controller {
       plan.v_out = bounce(plan.v_in, D*yaw_rate, nn, en, et);
     }
     plan.valid = true;
+    plan.apex = apex;
     return plan;
   }
 
@@ -924,14 +979,29 @@ class Controller {
           // Outer loop on height: compare each planned flight's apex with the request.
           if (!b.contact) flight_max_ = std::max(flight_max_, b.gap);
           if (planned_flight_ && b.v[2] < -0.2 && flight_max_ > 0.01) {
-            speed_bias_ = std::clamp(speed_bias_+0.5*(launch_speed(apex_, c_.drag)-launch_speed(flight_max_, c_.drag)),
-                                     -0.4, 0.4);
+            speed_bias_ = std::clamp(speed_bias_+0.5*(launch_speed(flight_target_, c_.drag)-
+                                                      launch_speed(flight_max_, c_.drag)), -0.4, 0.4);
             planned_flight_ = false;
           }
           bounce_step(now, b, apex_);
         }
         break;
     }
+  }
+
+  // Circle reference while balancing: the radius eases in so the path starts at rest.
+  void circle_path(double now) {
+    if (circle_start_ < 0) circle_start_ = now;
+    const double tau = now-circle_start_, Tr = 1.5, w = 2*kPi/circle_period_;
+    const double u = std::min(1.0, tau/Tr);
+    const double r = circle_r_*u*u*u*(10-15*u+6*u*u);
+    const double rd = tau < Tr ? circle_r_*30*u*u*(1-u)*(1-u)/Tr : 0;
+    const double rdd = tau < Tr ? circle_r_*60*u*(1-u)*(1-2*u)/(Tr*Tr) : 0;
+    const double th = w*tau, c = std::cos(th), s = std::sin(th);
+    const double x[2] = {circle_centre_[0]+r*c, circle_centre_[1]+r*s};
+    const double v[2] = {rd*c-r*w*s, rd*s+r*w*c};
+    const double a[2] = {rdd*c-2*rd*w*s-r*w*w*c, rdd*s+2*rd*w*c-r*w*w*s};
+    bal_.path(x, v, a);
   }
 
   void launch(double now) {
@@ -963,16 +1033,69 @@ class Controller {
         bias_[a] = std::clamp(bias_[a]+c_.lateral_integral*(target_[a]-plan_.p_in[a]), -0.3, 0.3);
       lock_until_ = plan_.t+std::max(0.03, std::fabs(plan_.surface_speed)/c_.decel);
       saturated_ = plan_.saturated;
+      flight_target_ = plan_.apex;
+      if (song_ >= 0 && song_started_) {
+        const Song& song = songs()[song_];
+        // Learn how long flights of each note length really take compared with the plan.
+        if (last_flight_ > 0 && last_impact_t_ > 0) {
+          double& e = flight_error_[last_length_];
+          e += 0.3*(std::clamp(plan_.t-last_impact_t_-last_flight_, -0.1, 0.1)-e);
+        }
+        last_flight_ = plan_.flight;
+        last_length_ = song.notes[song_k_].second;
+        // This impact played the song's current note; move the schedule on by its length.
+        note_ = {song.notes[song_k_].first, plan_.t};  // 0 for a silent bounce.
+        note_index_ = song_k_;
+        if (std::fabs(plan_.t-song_next_t_) > 0.25) song_next_t_ = plan_.t;  // Lost the beat: restart it here.
+        note_beat_ = song_next_t_;
+        song_next_t_ += song.notes[song_k_].second*song_beat_;
+        song_k_ = (song_k_+1)%static_cast<int>(song.notes.size());
+      }
+      if (circle_r_ > 0) {
+        // Hop round the circle at the lap rate.
+        if (last_impact_t_ > 0) hop_angle_ += 2*kPi*(plan_.t-last_impact_t_)/circle_period_;
+        target_ = {circle_centre_[0]+circle_r_*std::cos(hop_angle_), circle_centre_[1]+circle_r_*std::sin(hop_angle_), 0};
+      }
+      last_impact_t_ = plan_.t;
       plan_ = ImpactPlan{};
       last_apex_ = flight_max_;
       flight_max_ = 0;
-      planned_flight_ = apex > 0 && !saturated_;
+      planned_flight_ = apex > 0 && !saturated_ && !(song_ >= 0 && song_started_);
     }
     if (now < lock_until_) return;
     if (plan_.valid && plan_.t-now < c_.freeze) return;
     if (b.contact) return;
+    if (circle_r_ > 0 && last_impact_t_ <= 0)
+      target_ = {circle_centre_[0]+circle_r_*std::cos(hop_angle_), circle_centre_[1]+circle_r_*std::sin(hop_angle_), 0};
     // Pump up gradually: at most about double the last apex per strike.
-    const ImpactPlan p = plan_impact(now, b, apex > 0 ? std::min(apex, 2*std::max(last_apex_, b.gap)+0.02) : 0);
+    const double pump = std::min(apex, 2*std::max(last_apex_, b.gap)+0.02);
+    ImpactPlan p;
+    if (song_ >= 0 && apex > 0) {
+      const Song& song = songs()[song_];
+      const double first = apex_for_flight(song.notes[0].second*song_beat_, c_.drag);
+      if (!song_started_) {
+        // Bounce at the first note's height until steady, then start on the next impact.
+        p = plan_impact(now, b, std::min(first, 2*std::max(last_apex_, b.gap)+0.02));
+        if (p.valid && !saturated_ && std::fabs(last_apex_-first) < 0.25*first) {
+          song_started_ = true;
+          song_k_ = 0;
+          song_next_t_ = p.t;
+        }
+      }
+      if (song_started_) {
+        // Next flight lasts until the next note's scheduled time, which also corrects drift.
+        p = plan_impact(now, b, flight_target_ > 0 ? flight_target_ : first);
+        const double length = song.notes[song_k_].second;
+        for (int it = 0; it < 2 && p.valid; it++) {
+          const double T = std::clamp(song_next_t_+length*song_beat_-p.t, 0.15, 0.65);
+          const double asked = std::clamp(T-flight_error_[length], 0.12, 0.7);
+          p = plan_impact(now, b, apex_for_flight(asked, c_.drag));
+          p.flight = asked;
+        }
+      }
+    } else {
+      p = plan_impact(now, b, apex > 0 ? pump : 0);
+    }
     if (!p.valid) return;
     const double left = p.t-now;
     if (left < 0.03) return;
@@ -1006,7 +1129,17 @@ class Controller {
   double bias_[2] = {0, 0};
   double contact_since_ = -1, flight_max_ = 0, speed_bias_ = 0, last_apex_ = 0;
   bool planned_flight_ = false, released_ = false, saturated_ = false;
-  double release_t_ = 0;
+  double release_t_ = 0, flight_target_ = 0;
+  // Circles.
+  double circle_r_ = 0, circle_period_ = 4, circle_start_ = -1, hop_angle_ = 0, last_impact_t_ = 0;
+  V3 circle_centre_{0, 0, 0};
+  // Songs.
+  int song_ = -1, song_k_ = 0, note_index_ = -1;
+  bool song_started_ = false;
+  double song_beat_ = 0.25, song_next_t_ = 0, last_flight_ = 0, last_length_ = 0;
+  std::map<double, double> flight_error_;  // Actual minus planned flight time, by note length.
+  std::pair<int, double> note_{0, 0};
+  double note_beat_ = 0;
   int request_ = kHold, phase_ = kLevel;
   ImpactPlan plan_;
   Output last_;

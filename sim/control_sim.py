@@ -28,7 +28,9 @@ class Output(ctypes.Structure):
                 ("contact", ctypes.c_int), ("ball", ctypes.c_double*3), ("ball_v", ctypes.c_double*3),
                 ("yaw", ctypes.c_double), ("nx", ctypes.c_double), ("ny", ctypes.c_double),
                 ("next_impact", ctypes.c_double), ("restitution", ctypes.c_double), ("apex", ctypes.c_double),
-                ("plate_normal", ctypes.c_double*3), ("limited", ctypes.c_int)]
+                ("plate_normal", ctypes.c_double*3), ("limited", ctypes.c_int),
+                ("note", ctypes.c_int), ("note_index", ctypes.c_int), ("note_time", ctypes.c_double),
+                ("note_beat", ctypes.c_double)]
 
 
 def library():
@@ -65,7 +67,21 @@ def library():
     lib.bc_gravity_torque.restype = ctypes.c_int
     lib.bc_holding_torque.argtypes = [ctypes.c_void_p, p, p]
     lib.bc_holding_torque.restype = ctypes.c_int
+    lib.bc_set_circle.argtypes = [ctypes.c_void_p, d, d]
+    lib.bc_set_song.argtypes = [ctypes.c_void_p, ctypes.c_int, d]
+    lib.bc_song_count.restype = ctypes.c_int
+    lib.bc_song_name.argtypes = [ctypes.c_int]
+    lib.bc_song_name.restype = ctypes.c_char_p
+    lib.bc_song_notes.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_int), p, ctypes.c_int]
+    lib.bc_song_notes.restype = ctypes.c_int
+    lib.bc_song_beat.argtypes = [ctypes.c_int]
+    lib.bc_song_beat.restype = d
     return lib
+
+
+def song_names(lib=None):
+    lib = lib or library()
+    return [lib.bc_song_name(i).decode() for i in range(lib.bc_song_count())]
 
 
 @dataclass
@@ -154,9 +170,10 @@ class Log:
     crank: list = field(default_factory=list)
     gap: list = field(default_factory=list)        # Ball surface above plate surface (m).
     contact: list = field(default_factory=list)    # True plate-ball contact.
+    notes: list = field(default_factory=list)      # (planned impact, MIDI note, index, scheduled beat) per song impact.
 
     def arrays(self):
-        return {k: np.array(v) for k, v in self.__dict__.items()}
+        return {k: np.array(v) for k, v in self.__dict__.items() if k != "notes"}
 
 
 class ControlSim:
@@ -266,6 +283,14 @@ class ControlSim:
         d2 = ctypes.c_double*2
         self.lib.bc_set_path(self.handle, d2(*x), d2(*v), d2(*a))
 
+    def circle(self, radius, period=4.):
+        self.lib.bc_set_circle(self.handle, radius, period)
+
+    def song(self, name, beat=0.):
+        """Bounce to a song by name; None stops."""
+        names = song_names(self.lib)
+        self.lib.bc_set_song(self.handle, names.index(name) if name else -1, beat)
+
     def apex(self, h):
         self.lib.bc_set_apex(self.handle, h)
 
@@ -354,6 +379,8 @@ class ControlSim:
         log.gap.append(n@(ball-surface)-self.plant.ball_radius)
         log.contact.append(any(set(c.geom) == {self.acrylic, self.ball_geom}
                                for c in d.contact[:d.ncon]))
+        if self.out.note:
+            log.notes.append((self.out.note_time, self.out.note, self.out.note_index, self.out.note_beat))
 
 
 def apexes(log, start=0.):

@@ -4,7 +4,8 @@
 //     control/build/ball-control control.json --socketcan-iface can0 --normals normals.txt
 //
 // The tracker's CSV arrives on stdin. Keys are read from the terminal: h hold, b balance,
-// j bounce, w/a/s/d move the target 5 mm, c centre it, +/- change the apex 10 mm, q quit.
+// j bounce, w/a/s/d move the target 5 mm, c centre it, +/- change the apex 10 mm, o circle on or
+// off, 1-5 bounce to a song, 0 stop the song, q quit. --sound plays each song note with aplay.
 // Any communication fault, controller fault or large tracking error stops all three motors.
 //
 // Gravity calibration (remove the ball first):
@@ -21,9 +22,12 @@
 #include <unistd.h>
 
 #include <atomic>
+#include <condition_variable>
+#include <cstdlib>
 #include <cmath>
 #include <cstdio>
 #include <iostream>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -90,6 +94,75 @@ class TrackerReader {
   std::atomic<bool> closed_{false};
 };
 
+// Plays song notes with aplay from its own thread, so the control loop never waits on audio.
+class NotePlayer {
+ public:
+  NotePlayer() {
+    char dir[] = "/tmp/ball-notes-XXXXXX";
+    if (mkdtemp(dir)) dir_ = dir;
+    thread_ = std::thread([this] { run(); });
+  }
+  ~NotePlayer() {
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      done_ = true;
+    }
+    cv_.notify_one();
+    thread_.join();
+  }
+  void play(int midi) {
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      queue_.push_back(midi);
+    }
+    cv_.notify_one();
+  }
+
+ private:
+  std::string file(int midi) {
+    const std::string path = dir_+"/"+std::to_string(midi)+".wav";
+    if (FILE* f = std::fopen(path.c_str(), "rb")) { std::fclose(f); return path; }
+    const int rate = 44100, n = rate*45/100;
+    const double hz = note_hz(midi);
+    std::vector<int16_t> pcm(n);
+    for (int i = 0; i < n; i++) {
+      const double t = static_cast<double>(i)/rate;
+      const double v = std::sin(2*kPi*hz*t)*std::exp(-7*t)+0.25*std::sin(8*kPi*hz*t)*std::exp(-20*t);
+      pcm[i] = static_cast<int16_t>(0.4*std::min(1.0, t/0.003)*v*32767);
+    }
+    FILE* f = std::fopen(path.c_str(), "wb");
+    if (!f) return path;
+    auto u32 = [&](uint32_t x) { std::fwrite(&x, 4, 1, f); };
+    auto u16 = [&](uint16_t x) { std::fwrite(&x, 2, 1, f); };
+    std::fwrite("RIFF", 1, 4, f); u32(36+2*n); std::fwrite("WAVEfmt ", 1, 8, f);
+    u32(16); u16(1); u16(1); u32(rate); u32(2*rate); u16(2); u16(16);
+    std::fwrite("data", 1, 4, f); u32(2*n);
+    std::fwrite(pcm.data(), 2, n, f);
+    std::fclose(f);
+    return path;
+  }
+  void run() {
+    while (true) {
+      int midi;
+      {
+        std::unique_lock<std::mutex> lock(mutex_);
+        cv_.wait(lock, [this] { return done_ || !queue_.empty(); });
+        if (done_) return;
+        midi = queue_.front();
+        queue_.erase(queue_.begin());
+      }
+      if (!dir_.empty() && midi > 0)
+        if (std::system(("aplay -q " + file(midi) + " >/dev/null 2>&1 &").c_str()) != 0) {}
+    }
+  }
+  std::string dir_;
+  std::thread thread_;
+  std::mutex mutex_;
+  std::condition_variable cv_;
+  std::vector<int> queue_;
+  bool done_ = false;
+};
+
 class Terminal {
  public:
   Terminal() {
@@ -119,14 +192,15 @@ class Terminal {
 struct Args {
   std::string config, normals, log, gravity_cal;
   double max_torque = 1.0, watchdog = 0.05, ramp = 3.0;
+  bool sound = false;
 };
 
 [[noreturn]] void usage() {
   std::cerr << "Usage: ball-control control.json [--normals FILE] [--log FILE.csv] [--max-torque NM]\n"
-               "                    [--ramp S] [--gravity-cal OUT.json]\n"
+               "                    [--ramp S] [--gravity-cal OUT.json] [--sound]\n"
                "                    <moteus transport options, e.g. --socketcan-iface can0>\n"
                "Reads tracker CSV on stdin. Keys: h hold, b balance, j bounce, wasd target, c centre,\n"
-               "+/- apex, q quit.\n";
+               "+/- apex, o circle, 1-5 songs, 0 stop the song, q quit.\n";
   std::exit(2);
 }
 
@@ -155,6 +229,7 @@ int run(int argc, char** argv) {
     else if (rest[i] == "--max-torque") args.max_torque = std::stod(value());
     else if (rest[i] == "--ramp") args.ramp = std::stod(value());
     else if (rest[i] == "--gravity-cal") args.gravity_cal = value();
+    else if (rest[i] == "--sound") args.sound = true;
     else if (args.config.empty() && rest[i][0] != '-') args.config = rest[i];
     else usage();
   }
@@ -261,9 +336,12 @@ int run(int argc, char** argv) {
   bool cal_started = false, cal_finished = false;
   TrackerReader tracker;
   if (!calibrating) tracker.start();
+  std::unique_ptr<NotePlayer> player;
+  if (args.sound) player = std::make_unique<NotePlayer>();
+  bool circle = false;
   Terminal term;
   std::fprintf(stderr, "Ramping to the idle posture over %.1f s. Keys: h hold, b balance, j bounce, wasd "
-               "target, c centre, +/- apex, q quit.\n", args.ramp);
+               "target, c centre, +/- apex, o circle, 1-%zu songs, 0 stop the song, q quit.\n", args.ramp, songs().size());
 
   timespec next;
   clock_gettime(CLOCK_MONOTONIC, &next);
@@ -350,11 +428,23 @@ int run(int argc, char** argv) {
           case '+': case '=': apex += 0.01; break;
           case '-': apex = std::max(0.02, apex-0.01); break;
           case 'q': g_stop = true; break;
+          case 'o':
+            circle = !circle;
+            ctl.set_circle(circle ? 0.06 : 0, 4.0);
+            break;
+          case '0': ctl.set_song(-1, 0); break;
+          default:
+            if (k >= '1' && k <= '9' && k-'1' < static_cast<int>(songs().size())) {
+              ctl.set_song(k-'1', 0);
+              ctl.set_mode(kBounce);
+              std::fprintf(stderr, "\nsong %s\n", songs()[k-'1'].name.c_str());
+            }
         }
         ctl.set_target(tx, ty);
         ctl.set_apex(apex);
       }
       out = ctl.step(now, q, qd);
+      if (player && out.note > 0) player->play(out.note);
     }
     for (int i = 0; i < 3; i++)
       if (std::fabs(out.q[i]-q[i]) > 0.6) {

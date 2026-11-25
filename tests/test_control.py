@@ -77,5 +77,32 @@ class ControlTest(unittest.TestCase):
         self.assertLess(sag["fitted"], sag["prior"]/3)
 
 
+    def test_circle(self):
+        sim = ControlSim()
+        sim.start()
+        sim.mode("balance")
+        sim.run(1)
+        sim.circle(.08, 4)
+        sim.run(8)
+        log = sim.log.arrays()
+        keep = log["t"] > log["t"][-1]-4
+        radius = np.linalg.norm(log["ball"][keep, :2]-sim.centre[:2], axis=1)
+        self.assertLess(abs(radius.mean()-.08), .003)
+        self.assertLess(radius.std(), .002)
+
+    def test_song_on_the_beat(self):
+        sim = ControlSim()
+        sim.start()
+        sim.apex(.08)
+        sim.mode("bounce")
+        sim.song("twinkle")
+        sim.run(16)
+        notes = sim.log.notes
+        self.assertGreater(len(notes), 40)
+        times, _ = impacts(sim.log.arrays(), 0)
+        error = np.array([times[np.argmin(np.abs(times-beat))]-beat for _, _, _, beat in notes[15:]])
+        self.assertLess(np.sqrt(np.mean(error**2)), .012)
+
+
 if __name__ == "__main__":
     unittest.main()

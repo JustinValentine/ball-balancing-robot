@@ -13,6 +13,8 @@ struct bc_output {
   double yaw, nx, ny, next_impact, restitution, apex;
   double plate_normal[3];
   int limited;
+  int note, note_index;
+  double note_time, note_beat;
 };
 
 void* bc_create(const char* config_path, double dt, char* error, int error_size) {
@@ -49,7 +51,26 @@ void bc_step(void* h, double now, const double* q, const double* qd, bc_output* 
   out->ok = o.ok; out->phase = o.phase; out->ball_valid = o.ball_valid; out->contact = o.contact;
   out->yaw = o.yaw; out->nx = o.nx; out->ny = o.ny; out->next_impact = o.next_impact;
   out->restitution = o.restitution; out->apex = o.apex; out->limited = o.limited;
+  out->note = o.note; out->note_index = o.note_index; out->note_time = o.note_time; out->note_beat = o.note_beat;
 }
+
+// Circles (radius m, lap s; radius 0 stops) and songs (index from bc_song_name, -1 stops).
+void bc_set_circle(void* h, double radius, double period) {
+  static_cast<ballctl::Controller*>(h)->set_circle(radius, period);
+}
+void bc_set_song(void* h, int index, double beat) { static_cast<ballctl::Controller*>(h)->set_song(index, beat); }
+int bc_song_count() { return static_cast<int>(ballctl::songs().size()); }
+const char* bc_song_name(int i) { return ballctl::songs()[i].name.c_str(); }
+// Notes of a song: MIDI numbers and lengths in units of its beat. Returns the note count.
+int bc_song_notes(int i, int* midi, double* length, int capacity) {
+  const auto& notes = ballctl::songs()[i].notes;
+  for (size_t k = 0; k < notes.size() && static_cast<int>(k) < capacity; k++) {
+    midi[k] = notes[k].first;
+    length[k] = notes[k].second;
+  }
+  return static_cast<int>(notes.size());
+}
+double bc_song_beat(int i) { return ballctl::songs()[i].beat; }
 
 // Plate centre at the idle posture (base frame, m) and the balance gains, for reports.
 void bc_info(void* h, double* centre, double* gains) {

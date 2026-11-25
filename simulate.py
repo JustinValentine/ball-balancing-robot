@@ -127,7 +127,8 @@ def snapshot(model, path):
 
 def control(args, cfg):
     """Run the C++ controller against the simulated robot, in the viewer or headless."""
-    from control_sim import ControlSim, PHASES, Plant, apexes, impacts
+    from control_sim import ControlSim, PHASES, Plant, apexes, impacts, song_names
+    import sound
     parts = None
     if args.view and not args.no_cad and (ROOT/"sim"/"cad"/"manifest.json").exists():
         parts, _ = cad.load(ROOT/"sim"/"cad", cfg)
@@ -142,17 +143,33 @@ def control(args, cfg):
         sim.start(ball_offset=(args.ball_x_mm/1000, args.ball_y_mm/1000))
     sim.target(args.target_x_mm/1000, args.target_y_mm/1000)
     sim.apex(args.apex_mm/1000)
+    songs = song_names(sim.lib)
+    if args.song:
+        if args.song not in songs:
+            raise SystemExit(f"Unknown song {args.song}; choose from {', '.join(songs)}")
+        args.mode = "bounce"
+        sim.song(args.song, args.beat)
     sim.mode(args.mode)
+    if args.circle_mm > 0:
+        sim.circle(args.circle_mm/1000, args.lap)
     if args.view:
         import time
         import mujoco.viewer
-        state = {"apex": args.apex_mm/1000, "x": args.target_x_mm/1000, "y": args.target_y_mm/1000}
+        state = {"apex": args.apex_mm/1000, "x": args.target_x_mm/1000, "y": args.target_y_mm/1000,
+                 "circle": args.circle_mm > 0, "song": songs.index(args.song) if args.song else -1}
         pending = []
         keys = {295: "hold", 296: "balance", 297: "bounce"}
+        player = sound.Player()
 
         def key(code):
             if code in keys:
                 pending.append(("mode", keys[code]))
+            elif code == 298:  # F9: circle on or off
+                state["circle"] = not state["circle"]
+                pending.append(("circle", state["circle"]))
+            elif code == 299:  # F10: next song, then off
+                state["song"] = state["song"]+1 if state["song"]+1 < len(songs) else -1
+                pending.append(("song", songs[state["song"]] if state["song"] >= 0 else None))
             elif code in (266, 267):
                 state["apex"] = max(.02, state["apex"]+(.01 if code == 266 else -.01))
                 pending.append(("apex", state["apex"]))
@@ -160,8 +177,9 @@ def control(args, cfg):
                 dx, dy = {260: (-.01, 0), 261: (.01, 0), 268: (0, .01), 269: (0, -.01)}[code]
                 state["x"], state["y"] = state["x"]+dx, state["y"]+dy
                 pending.append(("target", (state["x"], state["y"])))
-        print("F6 hold, F7 balance, F8 bounce, Page Up/Down apex +-10 mm, Insert/Delete/Home/End move the "
-              "target -x/+x/+y/-y by 10 mm. Key 3 shows the simplified physics shapes.")
+        print("F6 hold, F7 balance, F8 bounce, F9 circle, F10 next song (" + ", ".join(songs) + ", off), "
+              "Page Up/Down apex +-10 mm, Insert/Delete/Home/End move the target -x/+x/+y/-y by 10 mm. "
+              "Key 3 shows the simplified physics shapes.")
         if sys.platform == "darwin" and "MJPYTHON_BIN" not in os.environ:
             raise SystemExit("On macOS the viewer needs mjpython: mjpython simulate.py control --view ...")
         with mujoco.viewer.launch_passive(sim.model, sim.data, key_callback=key) as viewer:
@@ -170,9 +188,19 @@ def control(args, cfg):
             while viewer.is_running():
                 while pending:
                     what, value = pending.pop(0)
-                    {"mode": sim.mode, "apex": sim.apex}.get(what, lambda v: sim.target(*v))(value)
+                    if what == "circle":
+                        sim.circle(max(args.circle_mm, 60)/1000 if value else 0, args.lap)
+                    elif what == "song":
+                        sim.song(value, args.beat)
+                        if value:
+                            sim.mode("bounce")
+                    else:
+                        {"mode": sim.mode, "apex": sim.apex}.get(what, lambda v: sim.target(*v))(value)
                     print(what, value)
+                notes = len(sim.log.notes)
                 sim.run(.01)
+                for _, midi, _, _ in sim.log.notes[notes:]:
+                    player.play(midi)
                 viewer.sync()
                 if PHASES[sim.out.phase] != last:
                     last = PHASES[sim.out.phase]
@@ -189,7 +217,8 @@ def control(args, cfg):
     print("Phases:", ", ".join(f"{p} at {tt} s" for tt, p in changes) or PHASES[phases[0]])
     error = np.linalg.norm(log["ball"][:, :2]-sim.centre[:2]-[args.target_x_mm/1000, args.target_y_mm/1000], axis=1)*1000
     last = t > t[-1]-2
-    if args.mode == "balance":
+    circling = args.circle_mm > 0
+    if args.mode == "balance" and not circling:
         settled = t[np.flatnonzero(error > 3)[-1]] if (error > 3).any() else 0
         print(f"Balance: within 3 mm of the target after {settled:.2f} s; last 2 s RMS {np.sqrt((error[last]**2).mean()):.2f} mm")
     elif args.mode == "bounce":
@@ -200,11 +229,31 @@ def control(args, cfg):
                   f"(target {args.apex_mm:.0f}) over {len(peaks)} bounces")
             gap, tt = log["gap"], log["t"]
             real = [k for k, tk in enumerate(times) if gap[max(0, np.searchsorted(tt, tk)-60)] > .02]
-            if real:
+            if real and circling:
+                r = np.linalg.norm(points[real, :2]-sim.centre[:2], axis=1)*1000
+                print(f"Hops round the circle: impacts at radius {r.mean():.1f} +- {r.std():.1f} mm (asked {args.circle_mm:.0f})")
+            elif real:
                 offset = (points[real, :2]-sim.centre[:2])*1000-[args.target_x_mm, args.target_y_mm]
                 print(f"Impacts: mean offset {np.round(offset.mean(axis=0), 1)} mm, RMS {np.sqrt((offset**2).sum(axis=1).mean()):.1f} mm")
         else:
             print("No bounces")
+    if args.song and sim.log.notes:
+        times, _ = impacts(log, log["t"][0])
+        err = np.array([times[np.argmin(np.abs(times-beat))]-beat for _, _, _, beat in sim.log.notes])*1000
+        late = err[len(err)//4:]
+        print(f"Song {args.song}: {len(sim.log.notes)} notes; impacts against the beat after the first bar: "
+              f"RMS {np.sqrt((late**2).mean()):.1f} ms, worst {np.abs(late).max():.1f} ms")
+    if circling and args.mode == "balance":
+        keep = t > 4
+        r = np.linalg.norm(log["ball"][keep, :2]-sim.centre[:2], axis=1)*1000
+        print(f"Circle: radius {r.mean():.1f} +- {r.std():.1f} mm (asked {args.circle_mm:.0f})")
+    if args.wav:
+        if not sim.log.notes:
+            print("No song notes to write")
+        else:
+            start = log["t"][0]
+            sound.write_wav(args.wav, sound.render([(tt-start, midi) for tt, midi, _, _ in sim.log.notes], t[-1]))
+            print(f"Wrote {args.wav}")
     torque = np.abs(log["torque"])
     print(f"Peak torque {torque.max():.2f} N m, saturated {np.mean(torque >= sim.plant.torque_limit-1e-6)*100:.1f}% of the time; "
           f"cranks {np.round(log['crank'].min(axis=0), 2)} to {np.round(log['crank'].max(axis=0), 2)} rad")
@@ -253,6 +302,11 @@ def main():
     run.add_argument("--kp",type=float,default=25,help="Simulated servo stiffness, N m/rad")
     run.add_argument("--kd",type=float,default=.45,help="Simulated servo damping, N m s/rad")
     run.add_argument("--payload-g",type=float,default=0,help="Unmodelled mass on the plate, 60 mm off centre")
+    run.add_argument("--circle-mm",type=float,default=0,help="Roll (balance) or hop (bounce) round a circle")
+    run.add_argument("--lap",type=float,default=4,help="Seconds per lap of the circle")
+    run.add_argument("--song",help="Bounce to a song: twinkle, ode, mary, jingle or shave")
+    run.add_argument("--beat",type=float,default=0,help="Seconds per beat (default: the song's own)")
+    run.add_argument("--wav",type=Path,help="Write the song notes, timed at the impacts, to a WAV file")
     capture=sub.add_parser("record",help="Record headless simulated images, encoders and truth")
     verify=sub.add_parser("score",help="Compare C++ replay results with physics ground truth")
     for p in (view,export,capture,inspect):

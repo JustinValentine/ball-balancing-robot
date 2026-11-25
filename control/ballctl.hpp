@@ -558,7 +558,7 @@ struct Config {
          balance_r = 40, reference_rate = 8, target_radius = 0.15;
   // Bouncing.
   double stroke_time = 0.08, decel = 1.5*kG, return_time = 0.15, hold_window = 0.015, freeze = 0.025,
-         plate_speed_max = 0.35, lateral_gain = 0.7, lateral_integral = 0.15, launch_speed = 0.6,
+         plate_speed_max = 0.8, lateral_gain = 0.7, lateral_integral = 0.15, launch_speed = 0.6,
          launch_dip = 0.012, apex_default = 0.10;
 
   static Config load(const std::string& path, Json* platform_out) {
@@ -590,7 +590,7 @@ struct Config {
     c.crank_min = l.get("crank_min_rad", c.crank_min);
     c.crank_max = l.get("crank_max_rad", c.crank_max);
     c.tilt_max = std::sin(l.get("tilt_max_deg", 8)*kPi/180);
-    c.yaw_span = l.get("stroke_yaw_deg", 11.5)*kPi/180;
+    c.yaw_span = l.get("stroke_yaw_deg", 15)*kPi/180;
     c.crank_speed_max = l.get("crank_speed_max_rad_s", c.crank_speed_max);
     c.crank_accel_max = l.get("crank_accel_max_rad_s2", c.crank_accel_max);
     const Json& p = j.section("plate");

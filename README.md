@@ -91,9 +91,21 @@ build/ball-vision track camera.yml stereo.yml tracker.yml normals.txt |
   control/build/ball-control control.json --socketcan-iface can0 --normals normals.txt --max-torque 0.8
 ```
 
-It ramps from rest to the idle pose over 3 s and holds there. Keys are b to balance, j to bounce, wasd to move the target, +/- for the apex and q to quit. The motors stop on a moteus fault, missing replies or a large tracking error, every command has a 50 ms watchdog, and crank speed and acceleration are capped at 10 rad/s and 800 rad/s².
+It ramps from rest to the idle pose over 3 s and holds there. Keys are b to balance, j to bounce, wasd to move the target, +/- for the apex, o for a circle, 1 to 5 for the songs, 0 to stop the song and q to quit. The motors stop on a moteus fault, missing replies or a large tracking error, every command has a 50 ms watchdog, and crank speed and acceleration are capped at 10 rad/s and 800 rad/s².
 
 Before the first run, copy control.example.json and set the crank limits, left_origin_mm (the left camera position in the Fusion frame) and the moteus gains. In simulation kp 10 N m/rad (63 N m/rev) with kd 0.3 to 0.5 N m s/rad worked well. In the CAD the rod ends reach their swivel limit near -21.5° of twist, so check by hand that they don't bind between about -8° and -32°.
+
+### Circles and songs
+
+The ball can also roll round a circle while balancing, hop round one while bouncing, or bounce to a tune:
+
+```sh
+python3 simulate.py control --mode balance --circle-mm 80
+python3 simulate.py control --song twinkle --wav twinkle.wav
+mjpython simulate.py control --view      # F9 circle, F10 next song
+```
+
+The songs are twinkle, ode, mary, jingle and shave. Each note is one bounce and its length sets how high the ball goes, so the impacts land on the beat, within about 5 ms in simulation after the first bar. The simulator plays the notes, and on the robot `--sound` plays them through the PC with aplay. Half notes need strikes up to 0.8 m/s. A ball with less bounce than a ping-pong ball needs more than the 2.5 N m torque cap to keep the beat.
 
 ### Gravity calibration
 
