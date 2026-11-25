@@ -11,6 +11,22 @@ STEP = .0005
 SURFACE_OFFSET = .018
 
 
+# Display materials: base colour and how glossy each surface is.
+MATERIALS = {
+    "acrylic": dict(rgba=".78 .88 .96 .28", specular=".9", shininess=".95", reflectance=".06"),
+    "printed": dict(rgba=".17 .18 .2 1", specular=".25", shininess=".35"),
+    "black": dict(rgba=".06 .06 .07 1", specular=".2", shininess=".25"),
+    "steel": dict(rgba=".63 .65 .68 1", specular=".8", shininess=".75", reflectance=".04"),
+    "brass": dict(rgba=".8 .63 .32 1", specular=".85", shininess=".8"),
+    "aluminum": dict(rgba=".74 .76 .79 1", specular=".55", shininess=".5"),
+    "oak": dict(rgba=".66 .5 .34 1", specular=".1", shininess=".15"),
+    "motor": dict(rgba=".3 .31 .33 1", specular=".6", shininess=".6"),
+    "pcb": dict(rgba=".05 .09 .07 1", specular=".3", shininess=".4"),
+    "camera": dict(rgba=".12 .14 .16 1", specular=".3", shininess=".4"),
+    "ball": dict(rgba=".98 .52 .1 1", specular=".35", shininess=".6"),
+}
+
+
 def vec(values):
     return " ".join(f"{v:.12g}" for v in values)
 
@@ -32,44 +48,57 @@ def make_model(cfg, disk_mm, distance_mm, baseline_mm, drop_mm, cad=None, surfac
         tolerance="1e-10", gravity="0 0 -9.81")
     add(model, "statistic", center=vec(center-[0,0,.07]), extent=".52")
     visual = add(model, "visual")
-    add(visual, "global", azimuth="115", elevation="-20")
-    add(visual,"headlight",ambient=".55 .55 .55",diffuse=".65 .65 .65")
-    add(visual,"rgba",haze=".20 .24 .28 1")
+    add(visual, "global", azimuth="115", elevation="-20", offwidth="1920", offheight="1080")
+    add(visual, "quality", shadowsize="4096", offsamples="8")
+    add(visual, "headlight", ambient=".2 .2 .22", diffuse=".3 .3 .3", specular=".05 .05 .05")
+    add(visual, "rgba", haze=".35 .42 .5 1")
     asset = add(model,"asset")
-    add(asset,"texture",type="skybox",builtin="gradient",rgb1=".32 .37 .41",rgb2=".11 .14 .19",
-        width="128",height="768")
+    add(asset, "texture", type="skybox", builtin="gradient", rgb1=".55 .66 .78", rgb2=".06 .08 .11",
+        width="512", height="3072")
+    add(asset, "texture", name="floor", type="2d", builtin="checker", mark="edge", rgb1=".27 .31 .36",
+        rgb2=".23 .27 .31", markrgb=".36 .41 .47", width="300", height="300")
+    add(asset, "material", name="floor", texture="floor", texuniform="true", texrepeat="6 6", reflectance=".08")
+    for name, attrs in MATERIALS.items():
+        add(asset, "material", name=name, **attrs)
     default = add(model, "default")
     add(default, "joint", damping=".01", armature=".00005")
-    add(default, "geom", contype="0", conaffinity="0", rgba=".18 .24 .29 1")
+    add(default, "geom", contype="0", conaffinity="0", material="printed")
     world = add(model, "worldbody")
-    add(world, "light", pos="0 -.5 1", dir="0 .4 -1")
-    add(world, "geom", type="plane", pos="0 0 -.11" if floor is None else vec([0,0,floor]), size="1 1 .01", rgba=".14 .16 .18 1",
-        contype="1", conaffinity="1")
+    # Key light with shadows, a cool fill from the other side and a rim light from behind.
+    # Directional lights also need a position: the shadow map is rendered from there.
+    for name, direction, diffuse, specular, shadow in (("key", (-.45, .55, -1), ".72 .7 .66", ".35 .35 .35", "true"),
+                                                       ("fill", (.7, .3, -.5), ".22 .25 .3", "0 0 0", "false"),
+                                                       ("rim", (0, -.9, -.35), ".2 .2 .22", ".2 .2 .22", "false")):
+        d = np.array(direction)/np.linalg.norm(direction)
+        add(world, "light", name=name, directional="true", pos=vec(center-1.2*d), dir=vec(d), diffuse=diffuse,
+            specular=specular, castshadow=shadow)
+    add(world, "geom", type="plane", pos="0 0 -.11" if floor is None else vec([0,0,floor]), size="2 2 .05",
+        material="floor", contype="1", conaffinity="1")
     # A narrow display ring connects the three fixed mounts. Its shape is illustrative.
     angles = np.linspace(0,2*np.pi,49)
     ring_r = np.linalg.norm(motors[:,:2]-center[:2],axis=1).mean()
     ring = np.column_stack((center[0]+ring_r*np.cos(angles),center[1]+ring_r*np.sin(angles),
                             np.full_like(angles,-.006)))
     for a,b in zip(ring[:-1],ring[1:]):
-        add(world,"geom",type="capsule",fromto=vec([*a,*b]),size=".009",rgba=".55 .39 .23 1",**hide)
+        add(world,"geom",type="capsule",fromto=vec([*a,*b]),size=".009",material="oak",**hide)
     plate = add(world, "body", name="plate", pos=vec(center))
     add(plate, "freejoint")
     # Cylinder determines contact and inertia. The joint brackets are visual.
     add(plate, "geom", name="acrylic", type="cylinder", size=vec([disk_mm/2000,THICKNESS/2]),
-        pos=vec([0,0,surface_offset-THICKNESS/2]), density="1180", rgba=".45 .83 .9 .35",
+        pos=vec([0,0,surface_offset-THICKNESS/2]), density="1180", material="acrylic",
         contype="1", conaffinity="1", friction=".55 .002 .0001", **hide)
     add(plate, "site", name="surface", pos=vec([0,0,surface_offset]), size=".001", rgba="0 0 0 0")
     ball = add(world, "body", name="ball", pos=vec(surface+[.008, .006, BALL_RADIUS+drop_mm/1000]))
     add(ball, "freejoint")
     add(ball, "geom", name="ball_surface", type="sphere", size=str(BALL_RADIUS), mass=".012",
-        contype="1", conaffinity="1", rgba=".97 .94 .88 1")
+        contype="1", conaffinity="1", material="ball")
     contacts = add(model,"contact")
     add(contacts,"pair",geom1="acrylic",geom2="ball_surface",solref=".003 .22",solimp=".95 .99 .0001")
     constraints, actuators = add(model, "equality"), add(model, "actuator")
     links = {"world": (world, np.zeros(3)), "plate": (plate, center)}
     for i, (base, elbow, tip, axis) in enumerate(zip(motors, elbows, tips, axes), 1):
         axis = axis / np.linalg.norm(axis)
-        add(world, "geom", type="cylinder", fromto=vec([*(base-.033*axis), *base]), size=".034", **hide)
+        add(world, "geom", type="cylinder", fromto=vec([*(base-.033*axis), *base]), size=".034", material="motor", **hide)
         foot = np.array([base[0],base[1],-.006])
         add(world,"geom",type="capsule",fromto=vec([*foot,*(base-.02*axis)]),size=".008",**hide)
         crank = add(world, "body", name=f"drive{i}", pos=vec(base))
@@ -78,7 +107,7 @@ def make_model(cfg, disk_mm, distance_mm, baseline_mm, drop_mm, cad=None, surfac
         rod = add(crank, "body", name=f"rod{i}", pos=vec(elbow-base))
         add(rod, "joint", type="hinge", axis=vec(axis))
         add(rod, "geom", type="capsule", fromto=vec([0,0,0,*(tip-elbow)]), size=".008", mass=".06",
-            rgba=".65 .69 .72 1", **hide)
+            material="steel", **hide)
         links[f"drive{i}"], links[f"rod{i}"] = (crank, base), (rod, elbow)
         add(rod, "site", name=f"tip{i}", pos=vec(tip-elbow), size=".005")
         add(plate, "site", name=f"socket{i}", pos=vec(tip-center), size=".004")
@@ -98,15 +127,15 @@ def make_model(cfg, disk_mm, distance_mm, baseline_mm, drop_mm, cad=None, surfac
         # MuJoCo looks along -Z with +Y up. Optical coordinates look along +Z.
         add(world, "camera", name=name, pos=vec(origin), xyaxes=vec([*rotation[0], *-rotation[1]]),
             fovy="57.7")
-        add(world, "geom", type="box", pos=vec(origin), size=".012 .01 .006", rgba=".16 .35 .4 1", **hide)
+        add(world, "geom", type="box", pos=vec(origin), size=".012 .01 .006", material="camera", **hide)
     for k, part in enumerate(cad or []):
         # STL vertices are millimetres in the Fusion frame. Every link frame keeps the
         # world orientation at home, so an offset places the mesh; MuJoCo keeps the
         # vertices where they are when it recentres the mesh.
         parent, origin = links[part.body]
         add(asset, "mesh", name=f"cad{k}", file=str(part.file), scale=".001 .001 .001", inertia="shell")
-        add(parent, "geom", name=f"cad{k}", type="mesh", mesh=f"cad{k}", pos=vec(-origin),
-            rgba=vec(part.rgba), density="0")
+        look = {"material": part.material} if part.material else {"rgba": vec(part.rgba)}
+        add(parent, "geom", name=f"cad{k}", type="mesh", mesh=f"cad{k}", pos=vec(-origin), density="0", **look)
     ET.indent(model)
     return ET.tostring(model, encoding="unicode")
 

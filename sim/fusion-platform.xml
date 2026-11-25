@@ -3,71 +3,87 @@
   <option timestep="0.0005" integrator="implicitfast" iterations="80" tolerance="1e-10" gravity="0 0 -9.81" />
   <statistic center="0.0231230433333 0.0100029273333 0.10945291" extent=".52" />
   <visual>
-    <global azimuth="115" elevation="-20" />
-    <headlight ambient=".55 .55 .55" diffuse=".65 .65 .65" />
-    <rgba haze=".20 .24 .28 1" />
+    <global azimuth="115" elevation="-20" offwidth="1920" offheight="1080" />
+    <quality shadowsize="4096" offsamples="8" />
+    <headlight ambient=".2 .2 .22" diffuse=".3 .3 .3" specular=".05 .05 .05" />
+    <rgba haze=".35 .42 .5 1" />
   </visual>
   <asset>
-    <texture type="skybox" builtin="gradient" rgb1=".32 .37 .41" rgb2=".11 .14 .19" width="128" height="768" />
+    <texture type="skybox" builtin="gradient" rgb1=".55 .66 .78" rgb2=".06 .08 .11" width="512" height="3072" />
+    <texture name="floor" type="2d" builtin="checker" mark="edge" rgb1=".27 .31 .36" rgb2=".23 .27 .31" markrgb=".36 .41 .47" width="300" height="300" />
+    <material name="floor" texture="floor" texuniform="true" texrepeat="6 6" reflectance=".08" />
+    <material name="acrylic" rgba=".78 .88 .96 .28" specular=".9" shininess=".95" reflectance=".06" />
+    <material name="printed" rgba=".17 .18 .2 1" specular=".25" shininess=".35" />
+    <material name="black" rgba=".06 .06 .07 1" specular=".2" shininess=".25" />
+    <material name="steel" rgba=".63 .65 .68 1" specular=".8" shininess=".75" reflectance=".04" />
+    <material name="brass" rgba=".8 .63 .32 1" specular=".85" shininess=".8" />
+    <material name="aluminum" rgba=".74 .76 .79 1" specular=".55" shininess=".5" />
+    <material name="oak" rgba=".66 .5 .34 1" specular=".1" shininess=".15" />
+    <material name="motor" rgba=".3 .31 .33 1" specular=".6" shininess=".6" />
+    <material name="pcb" rgba=".05 .09 .07 1" specular=".3" shininess=".4" />
+    <material name="camera" rgba=".12 .14 .16 1" specular=".3" shininess=".4" />
+    <material name="ball" rgba=".98 .52 .1 1" specular=".35" shininess=".6" />
   </asset>
   <default>
     <joint damping=".01" armature=".00005" />
-    <geom contype="0" conaffinity="0" rgba=".18 .24 .29 1" />
+    <geom contype="0" conaffinity="0" material="printed" />
   </default>
   <worldbody>
-    <light pos="0 -.5 1" dir="0 .4 -1" />
-    <geom type="plane" pos="0 0 -.11" size="1 1 .01" rgba=".14 .16 .18 1" contype="1" conaffinity="1" />
-    <geom type="capsule" fromto="0.16602110098 0.0100029273333 -0.006 0.164798588287 0.0286548666736 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.164798588287 0.0286548666736 -0.006 0.161151967741 0.0469876661605 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.161151967741 0.0469876661605 -0.006 0.155143634029 0.0646876465119 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.155143634029 0.0646876465119 -0.006 0.146876391407 0.0814519561567 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.146876391407 0.0814519561567 -0.006 0.136491694689 0.0969937531089 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.136491694689 0.0969937531089 -0.006 0.124167228914 0.111047112914 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.124167228914 0.111047112914 -0.006 0.110113869109 0.123371578689 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.110113869109 0.123371578689 -0.006 0.0945720721567 0.133756275407 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0945720721567 0.133756275407 -0.006 0.0778077625119 0.142023518029 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0778077625119 0.142023518029 -0.006 0.0601077821605 0.148031851741 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0601077821605 0.148031851741 -0.006 0.0417749826736 0.151678472287 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0417749826736 0.151678472287 -0.006 0.0231230433333 0.15290098498 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0231230433333 0.15290098498 -0.006 0.00447110399306 0.151678472287 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.00447110399306 0.151678472287 -0.006 -0.0138616954938 0.148031851741 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0138616954938 0.148031851741 -0.006 -0.0315616758452 0.142023518029 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0315616758452 0.142023518029 -0.006 -0.04832598549 0.133756275407 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.04832598549 0.133756275407 -0.006 -0.0638677824423 0.123371578689 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0638677824423 0.123371578689 -0.006 -0.0779211422471 0.111047112914 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0779211422471 0.111047112914 -0.006 -0.0902456080218 0.0969937531089 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0902456080218 0.0969937531089 -0.006 -0.10063030474 0.0814519561567 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.10063030474 0.0814519561567 -0.006 -0.108897547362 0.0646876465119 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.108897547362 0.0646876465119 -0.006 -0.114905881074 0.0469876661605 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.114905881074 0.0469876661605 -0.006 -0.118552501621 0.0286548666736 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.118552501621 0.0286548666736 -0.006 -0.119775014313 0.0100029273333 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.119775014313 0.0100029273333 -0.006 -0.118552501621 -0.00864901200694 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.118552501621 -0.00864901200694 -0.006 -0.114905881074 -0.0269818114938 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.114905881074 -0.0269818114938 -0.006 -0.108897547362 -0.0446817918452 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.108897547362 -0.0446817918452 -0.006 -0.10063030474 -0.06144610149 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.10063030474 -0.06144610149 -0.006 -0.0902456080218 -0.0769878984423 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0902456080218 -0.0769878984423 -0.006 -0.0779211422471 -0.0910412582471 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0779211422471 -0.0910412582471 -0.006 -0.0638677824423 -0.103365724022 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0638677824423 -0.103365724022 -0.006 -0.04832598549 -0.11375042074 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.04832598549 -0.11375042074 -0.006 -0.0315616758452 -0.122017663362 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0315616758452 -0.122017663362 -0.006 -0.0138616954938 -0.128025997074 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="-0.0138616954938 -0.128025997074 -0.006 0.00447110399306 -0.131672617621 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.00447110399306 -0.131672617621 -0.006 0.0231230433333 -0.132895130313 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0231230433333 -0.132895130313 -0.006 0.0417749826736 -0.131672617621 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0417749826736 -0.131672617621 -0.006 0.0601077821605 -0.128025997074 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0601077821605 -0.128025997074 -0.006 0.0778077625119 -0.122017663362 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0778077625119 -0.122017663362 -0.006 0.0945720721567 -0.11375042074 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.0945720721567 -0.11375042074 -0.006 0.110113869109 -0.103365724022 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.110113869109 -0.103365724022 -0.006 0.124167228914 -0.0910412582471 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.124167228914 -0.0910412582471 -0.006 0.136491694689 -0.0769878984423 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.136491694689 -0.0769878984423 -0.006 0.146876391407 -0.06144610149 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.146876391407 -0.06144610149 -0.006 0.155143634029 -0.0446817918452 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.155143634029 -0.0446817918452 -0.006 0.161151967741 -0.0269818114938 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.161151967741 -0.0269818114938 -0.006 0.164798588287 -0.00864901200694 -0.006" size=".009" rgba=".55 .39 .23 1" />
-    <geom type="capsule" fromto="0.164798588287 -0.00864901200694 -0.006 0.16602110098 0.0100029273333 -0.006" size=".009" rgba=".55 .39 .23 1" />
+    <light name="key" directional="true" pos="0.463298182141 -0.527988908987 1.15761988513" dir="-0.366812615673 0.448326530267 -0.815139145939" diffuse=".72 .7 .66" specular=".35 .35 .35" castshadow="true" />
+    <light name="fill" directional="true" pos="-0.89889674058 -0.38514840863 0.838038469938" dir="0.768349819928 0.329292779969 -0.548821299948" diffuse=".22 .25 .3" specular="0 0 0" castshadow="false" />
+    <light name="rim" directional="true" pos="0.0231230433333 1.12840853318 0.614388423386" dir="0 -0.932004671541 -0.362446261155" diffuse=".2 .2 .22" specular=".2 .2 .22" castshadow="false" />
+    <geom type="plane" pos="0 0 -.11" size="2 2 .05" material="floor" contype="1" conaffinity="1" />
+    <geom type="capsule" fromto="0.16602110098 0.0100029273333 -0.006 0.164798588287 0.0286548666736 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.164798588287 0.0286548666736 -0.006 0.161151967741 0.0469876661605 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.161151967741 0.0469876661605 -0.006 0.155143634029 0.0646876465119 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.155143634029 0.0646876465119 -0.006 0.146876391407 0.0814519561567 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.146876391407 0.0814519561567 -0.006 0.136491694689 0.0969937531089 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.136491694689 0.0969937531089 -0.006 0.124167228914 0.111047112914 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.124167228914 0.111047112914 -0.006 0.110113869109 0.123371578689 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.110113869109 0.123371578689 -0.006 0.0945720721567 0.133756275407 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0945720721567 0.133756275407 -0.006 0.0778077625119 0.142023518029 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0778077625119 0.142023518029 -0.006 0.0601077821605 0.148031851741 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0601077821605 0.148031851741 -0.006 0.0417749826736 0.151678472287 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0417749826736 0.151678472287 -0.006 0.0231230433333 0.15290098498 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0231230433333 0.15290098498 -0.006 0.00447110399306 0.151678472287 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.00447110399306 0.151678472287 -0.006 -0.0138616954938 0.148031851741 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0138616954938 0.148031851741 -0.006 -0.0315616758452 0.142023518029 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0315616758452 0.142023518029 -0.006 -0.04832598549 0.133756275407 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.04832598549 0.133756275407 -0.006 -0.0638677824423 0.123371578689 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0638677824423 0.123371578689 -0.006 -0.0779211422471 0.111047112914 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0779211422471 0.111047112914 -0.006 -0.0902456080218 0.0969937531089 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0902456080218 0.0969937531089 -0.006 -0.10063030474 0.0814519561567 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.10063030474 0.0814519561567 -0.006 -0.108897547362 0.0646876465119 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.108897547362 0.0646876465119 -0.006 -0.114905881074 0.0469876661605 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.114905881074 0.0469876661605 -0.006 -0.118552501621 0.0286548666736 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.118552501621 0.0286548666736 -0.006 -0.119775014313 0.0100029273333 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.119775014313 0.0100029273333 -0.006 -0.118552501621 -0.00864901200694 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.118552501621 -0.00864901200694 -0.006 -0.114905881074 -0.0269818114938 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.114905881074 -0.0269818114938 -0.006 -0.108897547362 -0.0446817918452 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.108897547362 -0.0446817918452 -0.006 -0.10063030474 -0.06144610149 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.10063030474 -0.06144610149 -0.006 -0.0902456080218 -0.0769878984423 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0902456080218 -0.0769878984423 -0.006 -0.0779211422471 -0.0910412582471 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0779211422471 -0.0910412582471 -0.006 -0.0638677824423 -0.103365724022 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0638677824423 -0.103365724022 -0.006 -0.04832598549 -0.11375042074 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.04832598549 -0.11375042074 -0.006 -0.0315616758452 -0.122017663362 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0315616758452 -0.122017663362 -0.006 -0.0138616954938 -0.128025997074 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="-0.0138616954938 -0.128025997074 -0.006 0.00447110399306 -0.131672617621 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.00447110399306 -0.131672617621 -0.006 0.0231230433333 -0.132895130313 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0231230433333 -0.132895130313 -0.006 0.0417749826736 -0.131672617621 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0417749826736 -0.131672617621 -0.006 0.0601077821605 -0.128025997074 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0601077821605 -0.128025997074 -0.006 0.0778077625119 -0.122017663362 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0778077625119 -0.122017663362 -0.006 0.0945720721567 -0.11375042074 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.0945720721567 -0.11375042074 -0.006 0.110113869109 -0.103365724022 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.110113869109 -0.103365724022 -0.006 0.124167228914 -0.0910412582471 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.124167228914 -0.0910412582471 -0.006 0.136491694689 -0.0769878984423 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.136491694689 -0.0769878984423 -0.006 0.146876391407 -0.06144610149 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.146876391407 -0.06144610149 -0.006 0.155143634029 -0.0446817918452 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.155143634029 -0.0446817918452 -0.006 0.161151967741 -0.0269818114938 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.161151967741 -0.0269818114938 -0.006 0.164798588287 -0.00864901200694 -0.006" size=".009" material="oak" />
+    <geom type="capsule" fromto="0.164798588287 -0.00864901200694 -0.006 0.16602110098 0.0100029273333 -0.006" size=".009" material="oak" />
     <body name="plate" pos="0.0231230433333 0.0100029273333 0.17945291">
       <freejoint />
-      <geom name="acrylic" type="cylinder" size="0.21 0.003175" pos="0 0 0.014825" density="1180" rgba=".45 .83 .9 .35" contype="1" conaffinity="1" friction=".55 .002 .0001" />
+      <geom name="acrylic" type="cylinder" size="0.21 0.003175" pos="0 0 0.014825" density="1180" material="acrylic" contype="1" conaffinity="1" friction=".55 .002 .0001" />
       <site name="surface" pos="0 0 0.018" size=".001" rgba="0 0 0 0" />
       <site name="socket1" pos="0.201668120667 -5.81023333333e-05 0" size=".004" />
       <geom type="capsule" fromto="0.201668120667 -5.81023333333e-05 0 0.201668120667 -5.81023333333e-05 0.01165" size=".005" mass=".01" />
@@ -78,45 +94,45 @@
     </body>
     <body name="ball" pos="0.0311230433333 0.0160029273333 0.26745291">
       <freejoint />
-      <geom name="ball_surface" type="sphere" size="0.015" mass=".012" contype="1" conaffinity="1" rgba=".97 .94 .88 1" />
+      <geom name="ball_surface" type="sphere" size="0.015" mass=".012" contype="1" conaffinity="1" material="ball" />
     </body>
-    <geom type="cylinder" fromto="0.194600395195 0.01 0.0191609387744 0.166021557 0.01 0.035660939" size=".034" />
+    <geom type="cylinder" fromto="0.194600395195 0.01 0.0191609387744 0.166021557 0.01 0.035660939" size=".034" material="motor" />
     <geom type="capsule" fromto="0.166021557 0.01 -0.006 0.183342064997 0.01 0.0256609388633" size=".008" />
     <body name="drive1" pos="0.166021557 0.01 0.035660939">
       <joint name="q1" type="hinge" axis="-0.866025399838 -0 0.500000006835" />
       <geom type="capsule" fromto="0 0 0 0.025173416 -0.076040597 0.060457912" size=".011" mass=".12" />
       <body name="rod1" pos="0.025173416 -0.076040597 0.060457912">
         <joint type="hinge" axis="-0.866025399838 -0 0.500000006835" />
-        <geom type="capsule" fromto="0 0 0 0.033596191 0.075985422 0.083334059" size=".008" mass=".06" rgba=".65 .69 .72 1" />
+        <geom type="capsule" fromto="0 0 0 0.033596191 0.075985422 0.083334059" size=".008" mass=".06" material="steel" />
         <site name="tip1" pos="0.033596191 0.075985422 0.083334059" size=".005" />
       </body>
     </body>
-    <geom type="cylinder" fromto="-0.0626140659508 0.158507343085 0.0191609389436 -0.048324647 0.133757343 0.035660939" size=".034" />
+    <geom type="cylinder" fromto="-0.0626140659508 0.158507343085 0.0191609389436 -0.048324647 0.133757343 0.035660939" size=".034" material="motor" />
     <geom type="capsule" fromto="-0.048324647 0.133757343 -0.006 -0.0569849009096 0.148757343051 0.0256609389658" size=".008" />
     <body name="drive2" pos="-0.048324647 0.133757343 0.035660939">
       <joint name="q2" type="hinge" axis="0.43301269548 -0.750000002563 0.500000001709" />
       <geom type="capsule" fromto="0 0 0 0.053266374 0.059821129 0.060457912" size=".011" mass=".12" />
       <body name="rod2" pos="0.053266374 0.059821129 0.060457912">
         <joint type="hinge" axis="0.43301269548 -0.750000002563 0.500000001709" />
-        <geom type="capsule" fromto="0 0 0 -0.0826034 -0.008897558 0.083334059" size=".008" mass=".06" rgba=".65 .69 .72 1" />
+        <geom type="capsule" fromto="0 0 0 -0.0826034 -0.008897558 0.083334059" size=".008" mass=".06" material="steel" />
         <site name="tip2" pos="-0.0826034 -0.008897558 0.083334059" size=".005" />
       </body>
     </body>
-    <geom type="cylinder" fromto="-0.0626171889508 -0.138498569085 0.0191609389436 -0.04832777 -0.113748569 0.035660939" size=".034" />
+    <geom type="cylinder" fromto="-0.0626171889508 -0.138498569085 0.0191609389436 -0.04832777 -0.113748569 0.035660939" size=".034" material="motor" />
     <geom type="capsule" fromto="-0.04832777 -0.113748569 -0.006 -0.0569880239096 -0.128748569051 0.0256609389658" size=".008" />
     <body name="drive3" pos="-0.04832777 -0.113748569 0.035660939">
       <joint name="q3" type="hinge" axis="0.43301269548 0.750000002563 0.500000001709" />
       <geom type="capsule" fromto="0 0 0 -0.078439799 0.016219472 0.060457912" size=".011" mass=".12" />
       <body name="rod3" pos="-0.078439799 0.016219472 0.060457912">
         <joint type="hinge" axis="0.43301269548 0.750000002563 0.500000001709" />
-        <geom type="capsule" fromto="0 0 0 0.049007208 -0.06708786 0.083334059" size=".008" mass=".06" rgba=".65 .69 .72 1" />
+        <geom type="capsule" fromto="0 0 0 0.049007208 -0.06708786 0.083334059" size=".008" mass=".06" material="steel" />
         <site name="tip3" pos="0.049007208 -0.06708786 0.083334059" size=".005" />
       </body>
     </body>
     <camera name="left" pos="-0.0168769566667 0.0100029273333 0.02745291" xyaxes="1 0 0 0 -1 0" fovy="57.7" />
-    <geom type="box" pos="-0.0168769566667 0.0100029273333 0.02745291" size=".012 .01 .006" rgba=".16 .35 .4 1" />
+    <geom type="box" pos="-0.0168769566667 0.0100029273333 0.02745291" size=".012 .01 .006" material="camera" />
     <camera name="right" pos="0.0631230433333 0.0100029273333 0.02745291" xyaxes="1 0 0 0 -1 0" fovy="57.7" />
-    <geom type="box" pos="0.0631230433333 0.0100029273333 0.02745291" size=".012 .01 .006" rgba=".16 .35 .4 1" />
+    <geom type="box" pos="0.0631230433333 0.0100029273333 0.02745291" size=".012 .01 .006" material="camera" />
   </worldbody>
   <contact>
     <pair geom1="acrylic" geom2="ball_surface" solref=".003 .22" solimp=".95 .99 .0001" />

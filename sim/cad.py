@@ -41,6 +41,23 @@ class Part:
     rgba: tuple
     vertices: np.ndarray  # Unique vertices in millimetres, Fusion root frame.
     triangles: int
+    material: str = ""    # Display material in mechanism.MATERIALS, from the Fusion appearance.
+
+
+def material(appearance, key):
+    """Display material for a Fusion appearance name and body key."""
+    a, k = appearance.lower(), key.lower()
+    if "moteus" in k:
+        return "pcb"
+    if k.endswith("/motor"):
+        return "motor"
+    for words, name in ((("glass", "acrylic", "clear"), "acrylic"), (("oak", "wood", "birch", "maple"), "oak"),
+                        (("brass", "bronze"), "brass"), (("aluminum", "aluminium"), "aluminum"),
+                        (("steel", "chrome", "nickel", "iron"), "steel"), (("black", "rubber"), "black"),
+                        (("tough", "resin", "pla", "petg", "abs", "nylon", "epx", "plastic"), "printed")):
+        if any(w in a for w in words):
+            return name
+    return ""
 
 
 def read_stl(path):
@@ -127,7 +144,8 @@ def load(directory, cfg):
         else:
             body, reason = classify(vertices, cfg)
         rgba = tuple(float(np.clip(c, 0, 1)) for c in entry.get("rgba", (.62, .64, .67, 1)))
-        parts.append(Part(entry["key"], path.resolve(), body, reason, rgba, vertices, len(triangles)))
+        parts.append(Part(entry["key"], path.resolve(), body, reason, rgba, vertices, len(triangles),
+                          material(entry.get("appearance", ""), entry["key"])))
     if not parts:
         raise ValueError(f"No bodies in {directory/'manifest.json'}")
     return parts, manifest
