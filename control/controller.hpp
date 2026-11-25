@@ -206,7 +206,8 @@ class Estimator {
   }
 
   // Fuse a measurement of the ball centre (base frame) taken at exposure time t.
-  bool update(double t, const V3& z, const PlateFn& plate) {
+  bool update(double t, const V3& raw, const PlateFn& plate) {
+    const V3 z = raw-offset_;
     if (!valid_ || t-last_ > c_.lost_after || t < b_.t-0.05) {
       reset(t, z, plate);
       return true;
@@ -273,8 +274,25 @@ class Estimator {
     last_ = t;
     classify(plate(t));
     learn(t);
+    // A ball resting on the plate sits exactly one radius above it. Whatever the camera says
+    // beyond that is calibration error between the cameras and the base (about 1 mm matters
+    // to the impact timing), so learn it along the plate normal while the ball rests.
+    if (b_.contact) {
+      const PlateState s = plate(t);
+      const double h = dot(s.n, z-s.S)-c_.radius;
+      if (std::fabs(h) < 0.004) {
+        offset_ = offset_+s.n*(0.02*h);
+        const double m = norm(offset_);
+        if (m > kOffsetMax) offset_ = offset_*(kOffsetMax/m);
+        rested_ += 1;
+      }
+    }
     return true;
   }
+
+  // Calibration offset learned from the resting ball (base frame), and how many measurements it has seen.
+  const V3& offset() const { return offset_; }
+  bool offset_learned() const { return rested_ >= 100; }
 
  private:
   static constexpr double kStick = 0.06;  // Below this rebound speed the ball stays on the plate.
@@ -317,6 +335,9 @@ class Estimator {
 
   const Config& c_;
   double range0_ = 0;
+  static constexpr double kOffsetMax = 0.006;
+  V3 offset_{0, 0, 0};
+  int rested_ = 0;
   Ball b_;
   bool valid_ = false;
   double last_ = -1e9, learned_ = -1, restitution_;
@@ -969,7 +990,9 @@ class Controller {
       case kSettling: {
         const double err = std::hypot(b.p[0]-target_[0], b.p[1]-target_[1]);
         const double speed = std::hypot(b.v[0], b.v[1]);
-        if (b.contact && ((err < 0.02 && speed < 0.05) || now-settle_since_ > 4)) launch(now);
+        // Launch once the ball has rested long enough for the camera offset to be learned.
+        if (b.contact && est_.offset_learned() &&
+            ((err < 0.02 && speed < 0.05) || now-settle_since_ > 4)) launch(now);
         break;
       }
       case kLaunching:
