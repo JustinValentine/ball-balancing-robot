@@ -80,7 +80,7 @@ mjpython simulate.py control --view      # F6 hold, F7 balance, F8 bounce
 python3 tests/test_control.py
 ```
 
-Balancing uses a Kalman filter on the ball that makes up for the camera delay, and an LQR on the plate tilt. The plate tilts about a point well below its surface, so the controller also corrects for the surface sliding under the ball. For bouncing, each impact is planned from the predicted flight, and the tilt and stroke speed at impact set where the ball goes and how high. The apex is corrected after every bounce and the ball's restitution is learned as it runs.
+Balancing uses a Kalman filter on the ball that makes up for the camera delay, and an LQR on the plate tilt. The plate doesn't tilt about its own surface (1° of tilt slides it about 1.5 mm sideways), so the controller also corrects for the surface sliding under the ball. For bouncing, each impact is planned from the predicted flight, and the tilt and stroke speed at impact set where the ball goes and how high. The apex is corrected after every bounce and the ball's restitution is learned as it runs.
 
 In simulation it holds the ball to about 0.1 mm, recovers from 60 mm off centre in about 1 s, and bounces to a 100 mm apex within about 2.5 mm. The motor, friction and camera numbers in the simulator (sim/control_sim.py) are my estimates.
 
