@@ -113,6 +113,16 @@ class Plant:
     noise_depth: float = .0008
     dropout: float = .005
     crank_offset: tuple = (0., 0., 0.)  # Encoder zero error: true angle minus what the controller sees.
+    torque_scale: float = 1.            # Torque delivered per torque the moteus reports (torque constant error).
+    camera_rotation: tuple = (0., 0., 0.)  # Stereo extrinsic error: small rotation (rad) and offset (m) of the
+    camera_offset: tuple = (0., 0., 0.)    # real left camera from where the controller's config puts it.
+    noise_growth: bool = False          # Scale noise with distance: lateral with range, depth with range squared,
+                                        # as for stereo; the base values then apply at the plate centre.
+    outliers: float = 0.                # Fraction of measurements that are wrong by outlier_size (m).
+    outlier_size: float = .01
+    latency_jitter: float = 0.          # Extra delivery delay per measurement, uniform 0..this (s).
+    geometry_error: float = 0.          # Build error: each motor, elbow and ball-joint point of the real
+                                        # robot is off from the config by up to this much per axis (m).
     seed: int = 1
 
 
@@ -204,7 +214,13 @@ class ControlSim:
         self.left_o = np.array(control["left_origin_mm"], float)/1000
         self.surface_offset = control["surface_offset_mm"]/1000
         self.balls = balls
-        self.model = mujoco.MjModel.from_xml_string(build_xml(platform, self.plant, cad, self.surface_offset, balls))
+        built = json.loads(json.dumps(platform))
+        if self.plant.geometry_error > 0:
+            shift = np.random.default_rng(self.plant.seed+7919)
+            for leg in built["legs"]:
+                for key in ("motor_mm", "elbow_mm", "ball_joint_mm"):
+                    leg[key] = list(np.array(leg[key])+shift.uniform(-1, 1, 3)*self.plant.geometry_error*1000)
+        self.model = mujoco.MjModel.from_xml_string(build_xml(built, self.plant, cad, self.surface_offset, balls))
         self.data = mujoco.MjData(self.model)
         self.lib = library()
         err = ctypes.create_string_buffer(512)
@@ -217,6 +233,12 @@ class ControlSim:
         self.centre = np.array(centre)
         self.gains = np.array(gains)
         self.rng = np.random.default_rng(self.plant.seed)
+        rx, ry, rz = self.plant.camera_rotation
+        skew = np.array([[0, -rz, ry], [rz, 0, -rx], [-ry, rx, 0]])
+        U, _, Vt = np.linalg.svd(np.eye(3)+skew)
+        self.true_R = U@Vt@self.left_R
+        self.true_o = self.left_o+np.array(self.plant.camera_offset)
+        self.range0 = np.linalg.norm(self.left_R@(self.centre-self.left_o))
         self.out = Output()
         self.cmd = np.zeros(3)
         self.cmd_v = np.zeros(3)
@@ -276,8 +298,9 @@ class ControlSim:
                 _, self.cmd, self.cmd_v, self.cmd_tau = self.queue.pop(0)
                 self.cmd = self.cmd+np.array(p.crank_offset)
             q, qd = d.qpos[self.cranks], d.qvel[self.crank_v]
-            d.ctrl[:] = np.clip(p.kp*(self.cmd-q)+p.kd*(self.cmd_v-qd)+self.cmd_tau, -p.torque_limit, p.torque_limit)
-            applied = d.ctrl.copy()
+            d.ctrl[:] = p.torque_scale*np.clip(p.kp*(self.cmd-q)+p.kd*(self.cmd_v-qd)+self.cmd_tau,
+                                               -p.torque_limit, p.torque_limit)
+            applied = d.ctrl/p.torque_scale   # What the moteus reports.
             fast = np.abs(qd) > .01
             moving[fast] = np.sign(qd[fast])
             mujoco.mj_step(self.model, d)
@@ -380,10 +403,17 @@ class ControlSim:
                 for body in self.ball_ids:
                     ball = d.xpos[body]
                     if self.rng.random() >= p.dropout and np.linalg.norm(ball-self.centre) < .5:
-                        left = R@(ball-o)+self.rng.normal(0, [p.noise_xy, p.noise_xy, p.noise_depth])
-                        seen.append((d.time+p.vision_latency, d.time+p.timestamp_offset, left))
+                        left = self.true_R@(ball-self.true_o)
+                        k = np.linalg.norm(left)/self.range0 if p.noise_growth else 1
+                        left = left+self.rng.normal(0, [p.noise_xy*k, p.noise_xy*k, p.noise_depth*k*k])
+                        if self.rng.random() < p.outliers:
+                            u = self.rng.normal(size=3)
+                            left = left+p.outlier_size*u/np.linalg.norm(u)
+                        late = self.rng.uniform(0, p.latency_jitter) if p.latency_jitter > 0 else 0
+                        seen.append((d.time+p.vision_latency+late, d.time+p.timestamp_offset, left))
                 self.rng.shuffle(seen)   # The tracker does not know which ball is which.
                 self.vision.extend(seen)
+                self.vision.sort(key=lambda m: m[0])
                 self.next_exposure += p.vision_period
             if d.time >= self.next_control-1e-9:
                 while self.vision and self.vision[0][0] <= d.time+1e-9:
@@ -401,7 +431,8 @@ class ControlSim:
                 _, self.cmd, self.cmd_v, self.cmd_tau = self.queue.pop(0)
                 self.cmd = self.cmd+np.array(p.crank_offset)
             q, qd = d.qpos[self.cranks], d.qvel[self.crank_v]
-            d.ctrl[:] = np.clip(p.kp*(self.cmd-q)+p.kd*(self.cmd_v-qd)+self.cmd_tau, -p.torque_limit, p.torque_limit)
+            d.ctrl[:] = p.torque_scale*np.clip(p.kp*(self.cmd-q)+p.kd*(self.cmd_v-qd)+self.cmd_tau,
+                                               -p.torque_limit, p.torque_limit)
             mujoco.mj_step(self.model, d)
 
     def record(self):
