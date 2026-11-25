@@ -161,14 +161,17 @@ def control(args, cfg):
         pending = []
         keys = {295: "hold", 296: "balance", 297: "bounce"}
         if juggle:
-            print("F11 drops the second ball into the right-hand column.")
+            print("The second ball drops in by itself 3 s after the first starts bouncing, and again "
+                  "whenever it is lost. F11 or F12 drops it straight away.")
         player = sound.Player()
 
         def key(code):
             if code in keys:
                 pending.append(("mode", keys[code]))
-            elif code == 300 and juggle:  # F11: drop the second ball
+            elif code in (300, 301) and juggle:  # F11 or F12: drop the second ball
                 pending.append(("drop", None))
+            elif code >= 290:
+                print(f"key {code} not used")
             elif code == 298:  # F9: circle on or off
                 state["circle"] = not state["circle"]
                 pending.append(("circle", state["circle"]))
@@ -190,6 +193,7 @@ def control(args, cfg):
         with mujoco.viewer.launch_passive(sim.model, sim.data, key_callback=key) as viewer:
             start, sim_start = time.perf_counter(), sim.data.time
             last = -1
+            bouncing_since = None
             while viewer.is_running():
                 while pending:
                     what, value = pending.pop(0)
@@ -204,6 +208,21 @@ def control(args, cfg):
                     else:
                         {"mode": sim.mode, "apex": sim.apex}.get(what, lambda v: sim.target(*v))(value)
                     print(what, value)
+                if juggle:
+                    # Drop the second ball in once the first has bounced for 3 s, just as it leaves
+                    # the plate so the two don't land in step.
+                    phase = PHASES[sim.out.phase]
+                    if phase in ("bouncing", "juggling"):
+                        bouncing_since = sim.data.time if bouncing_since is None else bouncing_since
+                    else:
+                        bouncing_since = None
+                    second = np.array(sim.log.ball2[-1]) if sim.log.ball2 else np.ones(3)
+                    lost = np.linalg.norm(second[:2]-sim.centre[:2]) > .16 or second[2] < sim.centre[2]-.02
+                    contact = sim.log.contact[-12:]
+                    leaving = len(contact) > 1 and contact[0] and not contact[-1]
+                    if lost and bouncing_since is not None and sim.data.time-bouncing_since > 3 and leaving:
+                        sim.drop_second((.045, 0), args.apex_mm/1000)
+                        print(f"{sim.data.time-sim_start:7.2f} s  second ball dropped")
                 notes = len(sim.log.notes)
                 sim.run(.01)
                 for _, midi, _, _ in sim.log.notes[notes:]:

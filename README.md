@@ -113,7 +113,7 @@ This branch juggles two balls in two columns 90 mm apart, striking them in turn.
 
 ```sh
 python3 simulate.py control --mode juggle --apex-mm 200      # drops the second ball after 6 s
-mjpython simulate.py control --view --mode juggle            # F11 drops the second ball
+mjpython simulate.py control --view --mode juggle            # second ball drops in by itself
 python3 tests/test_two_balls.py build/ball-vision            # two-ball stereo tracking
 ```
 
