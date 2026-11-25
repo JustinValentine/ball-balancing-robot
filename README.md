@@ -117,7 +117,7 @@ mjpython simulate.py control --view --mode juggle            # second ball drops
 python3 tests/test_two_balls.py build/ball-vision            # two-ball stereo tracking
 ```
 
-On the robot the tracker has to report both balls, so set `balls: 2` in tracker.yml. In simulation about 9 in 10 drops turn into steady juggling at a 200 mm apex, with strikes every 200 ms; the rest are lost in the first few seconds, when the second ball lands almost in step with the first. Dropping it as the first ball leaves the plate avoids that.
+On the robot the tracker has to report both balls, so set `balls: 2` in tracker.yml. While juggling the plate doesn't stop between strikes. It swings straight from one strike into the next, so the motors see a smooth wave of torque instead of a stop and start every 200 ms. In simulation all 61 test drops turned into steady juggling at a 200 mm apex, with strikes every 200 ms.
 
 ### Gravity calibration
 

@@ -1153,13 +1153,20 @@ class Controller {
     const double left = p.t-now;
     if (left < 0.03) return;
     plan_ = p;
-    if (left > c_.stroke_time+0.04) {
+    if (phase_ == kJuggling) {
+      // Strikes come every 200 ms or so, too often for a dip, stroke, stop and return. Swing
+      // straight from wherever the plate is into the strike, so the plate moves in one smooth
+      // oscillation; the stop and return after it only run if no next strike is planned.
+      yaw_.to(now, left, p.yaw, p.yaw_rate, 0);
+    } else if (left > c_.stroke_time+0.04) {
       yaw_.to(now, left-c_.stroke_time, p.yaw_pre, 0, 0);
       yaw_.then(c_.stroke_time, p.yaw, p.yaw_rate, 0);
     } else {
       yaw_.to(now, left, p.yaw, p.yaw_rate, 0);
     }
-    const double T_d = std::clamp(std::fabs(p.surface_speed)/c_.decel, 0.02, 0.1);
+    // After the strike the ball is gone, so there is no need to stop hard. While juggling, ease
+    // off over about a quarter of the swing; the next swing usually takes over before the end.
+    const double T_d = phase_ == kJuggling ? 0.05 : std::clamp(std::fabs(p.surface_speed)/c_.decel, 0.02, 0.1);
     yaw_.then(T_d, p.yaw+p.yaw_rate*T_d/2, 0, 0);
     yaw_.then(c_.return_time, c_.idle_yaw, 0, 0);
     const double tilt_time = std::max(left-c_.hold_window, 0.03);
