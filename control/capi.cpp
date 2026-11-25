@@ -15,6 +15,8 @@ struct bc_output {
   int limited;
   int note, note_index;
   double note_time, note_beat;
+  int ball2_valid;
+  double ball2[3];
 };
 
 void* bc_create(const char* config_path, double dt, char* error, int error_size) {
@@ -52,12 +54,15 @@ void bc_step(void* h, double now, const double* q, const double* qd, bc_output* 
   out->yaw = o.yaw; out->nx = o.nx; out->ny = o.ny; out->next_impact = o.next_impact;
   out->restitution = o.restitution; out->apex = o.apex; out->limited = o.limited;
   out->note = o.note; out->note_index = o.note_index; out->note_time = o.note_time; out->note_beat = o.note_beat;
+  out->ball2_valid = o.ball2_valid;
+  for (int i = 0; i < 3; i++) out->ball2[i] = o.ball2[i];
 }
 
 // Circles (radius m, lap s; radius 0 stops) and songs (index from bc_song_name, -1 stops).
 void bc_set_circle(void* h, double radius, double period) {
   static_cast<ballctl::Controller*>(h)->set_circle(radius, period);
 }
+void bc_set_juggle_spacing(void* h, double half) { static_cast<ballctl::Controller*>(h)->set_juggle_spacing(half); }
 void bc_set_song(void* h, int index, double beat) { static_cast<ballctl::Controller*>(h)->set_song(index, beat); }
 int bc_song_count() { return static_cast<int>(ballctl::songs().size()); }
 const char* bc_song_name(int i) { return ballctl::songs()[i].name.c_str(); }

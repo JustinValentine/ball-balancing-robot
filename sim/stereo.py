@@ -37,6 +37,7 @@ class CameraPair:
         self.background = (40+10*x/WIDTH+7*y/HEIGHT).astype(np.uint8)
 
     def image(self, eye, ball, surface, normal):
+        """Render one ball centre, or several (an (N, 3) array), nearer balls in front."""
         # Apply Snell's law at the physical lower/upper planes. Rays missing
         # the disk go directly to the ball. Edge-wall refraction is omitted.
         d = self.rays
@@ -52,14 +53,16 @@ class CameraPair:
         exit_radius2 = ((last-(surface-eye).astype(np.float32))**2).sum(axis=2)
         through = (c>0) & (h>0) & (entry_radius2<=self.radius**2) & (exit_radius2<=self.radius**2)
         origin = np.where(through[:,:,None],last,0)
-        offset = (ball-eye).astype(np.float32)-origin
-        forward = (offset*d).sum(axis=2)
-        perp = offset-forward[:,:,None]*d
-        r2 = (perp*perp).sum(axis=2)/BALL_RADIUS**2
-        hit = (r2<=1) & (forward>0)
         image = self.background.copy()
         image[through] += 5
         rim = through & (exit_radius2>(self.radius-.0015)**2)
         image[rim] = 100
-        image[hit] = 200+48*np.sqrt(1-r2[hit])
+        balls = np.atleast_2d(ball)
+        for centre in sorted(balls, key=lambda b: -np.linalg.norm(b-eye)):
+            offset = (centre-eye).astype(np.float32)-origin
+            forward = (offset*d).sum(axis=2)
+            perp = offset-forward[:,:,None]*d
+            r2 = (perp*perp).sum(axis=2)/BALL_RADIUS**2
+            hit = (r2<=1) & (forward>0)
+            image[hit] = 200+48*np.sqrt(1-r2[hit])
         return image

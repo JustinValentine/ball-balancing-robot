@@ -107,6 +107,18 @@ mjpython simulate.py control --view      # F9 circle, F10 next song
 
 The songs are twinkle, ode, mary, jingle and shave. Each note is one bounce and its length sets how high the ball goes, so the impacts land on the beat, within about 5 ms in simulation after the first bar. The simulator plays the notes, and on the robot `--sound` plays them through the PC with aplay. Half notes need strikes up to 0.8 m/s. A ball with less bounce than a ping-pong ball needs more than the 2.5 N m torque cap to keep the beat.
 
+### Two balls
+
+This branch juggles two balls in two columns 90 mm apart, striking them in turn. Each strike sends its ball to its own slot on a shared beat, half a flight after the other ball, so the two stay alternating. Start one ball bouncing with k, then drop the second one in by hand over the right-hand column.
+
+```sh
+python3 simulate.py control --mode juggle --apex-mm 200      # drops the second ball after 6 s
+mjpython simulate.py control --view --mode juggle            # F11 drops the second ball
+python3 tests/test_two_balls.py build/ball-vision            # two-ball stereo tracking
+```
+
+On the robot the tracker has to report both balls, so set `balls: 2` in tracker.yml. In simulation about 9 in 10 drops turn into steady juggling at a 200 mm apex, with strikes every 200 ms; the rest are lost in the first few seconds, when the second ball lands almost in step with the first. Dropping it as the first ball leaves the plate avoids that.
+
 ### Gravity calibration
 
 With the ball off the plate:

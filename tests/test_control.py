@@ -104,5 +104,29 @@ class ControlTest(unittest.TestCase):
         self.assertLess(np.sqrt(np.mean(error**2)), .012)
 
 
+    def test_two_ball_juggle(self):
+        sim = ControlSim(plant=Plant(seed=3), balls=2)
+        sim.start()
+        sim.apex(.2)
+        sim.mode("juggle")
+        sim.run(6.1)
+        sim.drop_second((.045, 0), .2)
+        dropped = sim.data.time
+        sim.run(10)
+        log = sim.log.arrays()
+        t = log["t"]
+
+        def onsets(contact, gap):
+            c = np.asarray(contact, bool)
+            on = np.flatnonzero(c[1:] & ~c[:-1])+1
+            return [t[i] for i in on if gap[max(0, i-20)] > .004 and t[i] > dropped+2]
+        first = onsets(log["contact"], log["gap"])
+        second = onsets(sim.log.contact2, np.array(sim.log.gap2))
+        self.assertGreater(len(first), 15)
+        self.assertGreater(len(second), 15)
+        order = [b for _, b in sorted([(x, 1) for x in first]+[(x, 2) for x in second])]
+        self.assertGreater(np.mean([a != b for a, b in zip(order[:-1], order[1:])]), .95)
+
+
 if __name__ == "__main__":
     unittest.main()

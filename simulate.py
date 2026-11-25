@@ -134,7 +134,8 @@ def control(args, cfg):
         parts, _ = cad.load(ROOT/"sim"/"cad", cfg)
     plant = Plant(restitution=args.restitution, vision_latency=args.latency_ms/1000, seed=args.seed,
                   kp=args.kp, kd=args.kd, payload=(args.payload_g/1000, (.06, .02, .01)))
-    sim = ControlSim(args.config, plant, parts)
+    juggle = args.mode == "juggle"
+    sim = ControlSim(args.config, plant, parts, balls=2 if juggle else 1)
     sim.start(ball_offset=(args.ball_x_mm/1000, args.ball_y_mm/1000))
     if args.calibrate:
         print(f"Gravity calibration on the simulated robot (it carries a {plant.payload[0]*1000:.0f} g payload the "
@@ -159,11 +160,15 @@ def control(args, cfg):
                  "circle": args.circle_mm > 0, "song": songs.index(args.song) if args.song else -1}
         pending = []
         keys = {295: "hold", 296: "balance", 297: "bounce"}
+        if juggle:
+            print("F11 drops the second ball into the right-hand column.")
         player = sound.Player()
 
         def key(code):
             if code in keys:
                 pending.append(("mode", keys[code]))
+            elif code == 300 and juggle:  # F11: drop the second ball
+                pending.append(("drop", None))
             elif code == 298:  # F9: circle on or off
                 state["circle"] = not state["circle"]
                 pending.append(("circle", state["circle"]))
@@ -188,7 +193,9 @@ def control(args, cfg):
             while viewer.is_running():
                 while pending:
                     what, value = pending.pop(0)
-                    if what == "circle":
+                    if what == "drop":
+                        sim.drop_second((.045, 0), args.apex_mm/1000)
+                    elif what == "circle":
                         sim.circle(max(args.circle_mm, 60)/1000 if value else 0, args.lap)
                     elif what == "song":
                         sim.song(value, args.beat)
@@ -208,6 +215,29 @@ def control(args, cfg):
                 lag = (sim.data.time-sim_start)-(time.perf_counter()-start)
                 if lag > 0:
                     time.sleep(lag)
+        return
+    if juggle:
+        # Let the first ball settle into its column, then drop the second like a hand would.
+        sim.run(args.drop_s)
+        sim.drop_second((.045, 0), args.apex_mm/1000)
+        dropped = sim.data.time
+        sim.run(args.seconds)
+        log = sim.log.arrays()
+        c1, c2 = log["contact"].astype(bool), np.array(sim.log.contact2, bool)
+        def onsets(c, gap):
+            on = np.flatnonzero(c[1:] & ~c[:-1])+1
+            return np.array([log["t"][i] for i in on if gap[max(0, i-20)] > .004 and log["t"][i] > dropped])
+        i1, i2 = onsets(c1, log["gap"]), onsets(c2, np.array(sim.log.gap2))
+        both = [t for t in sorted(np.concatenate([i1, i2])) if (np.abs(i1-t) < 1).any() and (np.abs(i2-t) < 1).any()]
+        kept = (both[-1]-dropped) if both else 0
+        order = [b for _, b in sorted([(t, 1) for t in i1]+[(t, 2) for t in i2])]
+        alternate = np.mean([a != b for a, b in zip(order[:-1], order[1:])]) if len(order) > 1 else 0
+        spacing = np.diff(sorted(np.concatenate([i1, i2])))
+        print(f"Juggling: both balls kept going for {kept:.1f} of {args.seconds:.0f} s after the drop; "
+              f"{len(i1)} and {len(i2)} impacts, {alternate*100:.0f}% alternating, "
+              f"impacts {np.median(spacing)*1000:.0f} +- {np.std(spacing[len(spacing)//3:])*1000:.0f} ms apart")
+        torque = np.abs(log["torque"])
+        print(f"Peak torque {torque.max():.2f} N m, saturated {np.mean(torque >= sim.plant.torque_limit-1e-6)*100:.1f}% of the time")
         return
     sim.run(args.seconds)
     log = sim.log.arrays()
@@ -286,7 +316,7 @@ def main():
     inspect=sub.add_parser("cad",help="Report how the Fusion export attaches to the links and save snapshots")
     run=sub.add_parser("control",help="Run the C++ ball controller on the simulated robot")
     run.add_argument("--config",type=Path,default=ROOT/"control.example.json")
-    run.add_argument("--mode",choices=("hold","balance","bounce"),default="balance")
+    run.add_argument("--mode",choices=("hold","balance","bounce","juggle"),default="balance")
     run.add_argument("--apex-mm",type=float,default=100)
     run.add_argument("--seconds",type=float,default=15,help="Headless run length")
     run.add_argument("--view",action="store_true",help="Open the viewer and run in real time")
@@ -307,6 +337,7 @@ def main():
     run.add_argument("--song",help="Bounce to a song: twinkle, ode, mary, jingle or shave")
     run.add_argument("--beat",type=float,default=0,help="Seconds per beat (default: the song's own)")
     run.add_argument("--wav",type=Path,help="Write the song notes, timed at the impacts, to a WAV file")
+    run.add_argument("--drop-s",type=float,default=6,help="Juggling: seconds before the second ball is dropped in")
     capture=sub.add_parser("record",help="Record headless simulated images, encoders and truth")
     verify=sub.add_parser("score",help="Compare C++ replay results with physics ground truth")
     for p in (view,export,capture,inspect):

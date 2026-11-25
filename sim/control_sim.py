@@ -30,7 +30,7 @@ class Output(ctypes.Structure):
                 ("next_impact", ctypes.c_double), ("restitution", ctypes.c_double), ("apex", ctypes.c_double),
                 ("plate_normal", ctypes.c_double*3), ("limited", ctypes.c_int),
                 ("note", ctypes.c_int), ("note_index", ctypes.c_int), ("note_time", ctypes.c_double),
-                ("note_beat", ctypes.c_double)]
+                ("note_beat", ctypes.c_double), ("ball2_valid", ctypes.c_int), ("ball2", ctypes.c_double*3)]
 
 
 def library():
@@ -69,6 +69,7 @@ def library():
     lib.bc_holding_torque.restype = ctypes.c_int
     lib.bc_set_circle.argtypes = [ctypes.c_void_p, d, d]
     lib.bc_set_song.argtypes = [ctypes.c_void_p, ctypes.c_int, d]
+    lib.bc_set_juggle_spacing.argtypes = [ctypes.c_void_p, d]
     lib.bc_song_count.restype = ctypes.c_int
     lib.bc_song_name.argtypes = [ctypes.c_int]
     lib.bc_song_name.restype = ctypes.c_char_p
@@ -115,7 +116,7 @@ class Plant:
     seed: int = 1
 
 
-def build_xml(cfg, plant, cad=None, surface_offset=.02855):
+def build_xml(cfg, plant, cad=None, surface_offset=.02855, balls=1):
     xml = make_model(cfg, 420, 170, 80, 55, cad, surface_offset)
     root = ET.fromstring(xml)
     option = root.find("option")
@@ -144,6 +145,20 @@ def build_xml(cfg, plant, cad=None, surface_offset=.02855):
     actuators = root.find("actuator")
     for act in list(actuators):
         actuators.remove(act)
+    if balls == 2:
+        # A second ball, parked off the robot until it is dropped in.
+        second = ET.fromstring(ET.tostring(ball))
+        second.set("name", "ball2")
+        second.set("pos", "1 1 .1")
+        second.find("geom").set("name", "ball2_surface")
+        second.find("geom").attrib.pop("material", None)
+        second.find("geom").set("rgba", ".97 .85 .2 1")
+        root.find("worldbody").append(second)
+        contact = root.find(".//contact")
+        for other in ("acrylic", "ball_surface"):
+            extra = ET.SubElement(contact, "pair", pair.attrib)
+            extra.set("geom1", other)
+            extra.set("geom2", "ball2_surface")
     for i in (1, 2, 3):
         ET.SubElement(actuators, "motor", name=f"crank{i}", joint=f"q{i}", ctrllimited="true",
                       ctrlrange=f"{-plant.torque_limit} {plant.torque_limit}")
@@ -170,6 +185,9 @@ class Log:
     crank: list = field(default_factory=list)
     gap: list = field(default_factory=list)        # Ball surface above plate surface (m).
     contact: list = field(default_factory=list)    # True plate-ball contact.
+    ball2: list = field(default_factory=list)
+    gap2: list = field(default_factory=list)
+    contact2: list = field(default_factory=list)
     notes: list = field(default_factory=list)      # (planned impact, MIDI note, index, scheduled beat) per song impact.
 
     def arrays(self):
@@ -177,7 +195,7 @@ class Log:
 
 
 class ControlSim:
-    def __init__(self, config=ROOT/"control.example.json", plant=None, cad=None, surface_offset=.02855):
+    def __init__(self, config=ROOT/"control.example.json", plant=None, cad=None, surface_offset=.02855, balls=1):
         self.plant = plant or Plant()
         self.config_path = Path(config)
         control = json.loads(self.config_path.read_text())
@@ -185,7 +203,8 @@ class ControlSim:
         self.left_R = np.array(platform["left_from_base_rotation"], float)
         self.left_o = np.array(control["left_origin_mm"], float)/1000
         self.surface_offset = control["surface_offset_mm"]/1000
-        self.model = mujoco.MjModel.from_xml_string(build_xml(platform, self.plant, cad, self.surface_offset))
+        self.balls = balls
+        self.model = mujoco.MjModel.from_xml_string(build_xml(platform, self.plant, cad, self.surface_offset, balls))
         self.data = mujoco.MjData(self.model)
         self.lib = library()
         err = ctypes.create_string_buffer(512)
@@ -211,6 +230,7 @@ class ControlSim:
         self.cranks = [self.model.joint(f"q{i}").qposadr[0] for i in (1, 2, 3)]
         self.crank_v = [self.model.joint(f"q{i}").dofadr[0] for i in (1, 2, 3)]
         self.ball_id = self.model.body("ball").id
+        self.ball_ids = [self.ball_id]+([self.model.body("ball2").id] if balls == 2 else [])
         self.acrylic = self.model.geom("acrylic").id
         self.ball_geom = self.model.geom("ball_surface").id
 
@@ -224,7 +244,7 @@ class ControlSim:
 
     # Commands --------------------------------------------------------------------------------
     def mode(self, name):
-        self.lib.bc_set_mode(self.handle, {"hold": 0, "balance": 1, "bounce": 2}[name])
+        self.lib.bc_set_mode(self.handle, {"hold": 0, "balance": 1, "bounce": 2, "juggle": 3}[name])
 
     def target(self, x, y):
         self.lib.bc_set_target(self.handle, x, y)
@@ -283,6 +303,20 @@ class ControlSim:
         d2 = ctypes.c_double*2
         self.lib.bc_set_path(self.handle, d2(*x), d2(*v), d2(*a))
 
+    def drop_second(self, offset=(.045, 0.), height=.2):
+        """Drop the second ball from rest, height above the plate surface at an offset from its centre."""
+        d = self.data
+        joint = self.model.joint(self.model.body("ball2").jntadr[0])
+        surface = d.site("surface").xpos
+        d.qpos[joint.qposadr[0]:joint.qposadr[0]+3] = [self.centre[0]+offset[0], self.centre[1]+offset[1],
+                                                       surface[2]+self.plant.ball_radius+height]
+        d.qpos[joint.qposadr[0]+3:joint.qposadr[0]+7] = [1, 0, 0, 0]
+        d.qvel[joint.dofadr[0]:joint.dofadr[0]+6] = 0
+
+    def juggle_spacing(self, half):
+        """Half the distance between the two juggling columns, m."""
+        self.lib.bc_set_juggle_spacing(self.handle, half)
+
     def circle(self, radius, period=4.):
         self.lib.bc_set_circle(self.handle, radius, period)
 
@@ -324,6 +358,10 @@ class ControlSim:
             hold[:2] += ball_offset
             d.qpos[ball_adr:ball_adr+3] = hold+[0, 0, .0005 if ball_height is None else 0]
             d.qpos[ball_adr+3:ball_adr+7] = [1, 0, 0, 0]
+            if self.balls == 2:
+                j2 = self.model.joint(self.model.body("ball2").jntadr[0])
+                d.qpos[j2.qposadr[0]:j2.qposadr[0]+3] = [1, 1, .1]
+                d.qvel[j2.dofadr[0]:j2.dofadr[0]+6] = 0
             d.qvel[self.model.joint(self.model.body("ball").jntadr[0]).dofadr[0]:][:6] = 0
         self.cmd[:] = d.qpos[self.cranks]
         self.next_control = d.time
@@ -338,11 +376,14 @@ class ControlSim:
         dbl3 = ctypes.c_double*3
         while d.time < t_end-1e-9:
             if d.time >= self.next_exposure-1e-9:
-                if self.rng.random() >= p.dropout:
-                    ball = d.xpos[self.ball_id]
-                    left = R@(ball-o)
-                    left += self.rng.normal(0, [p.noise_xy, p.noise_xy, p.noise_depth])
-                    self.vision.append((d.time+p.vision_latency, d.time+p.timestamp_offset, left))
+                seen = []
+                for body in self.ball_ids:
+                    ball = d.xpos[body]
+                    if self.rng.random() >= p.dropout and np.linalg.norm(ball-self.centre) < .5:
+                        left = R@(ball-o)+self.rng.normal(0, [p.noise_xy, p.noise_xy, p.noise_depth])
+                        seen.append((d.time+p.vision_latency, d.time+p.timestamp_offset, left))
+                self.rng.shuffle(seen)   # The tracker does not know which ball is which.
+                self.vision.extend(seen)
                 self.next_exposure += p.vision_period
             if d.time >= self.next_control-1e-9:
                 while self.vision and self.vision[0][0] <= d.time+1e-9:
@@ -379,6 +420,12 @@ class ControlSim:
         log.gap.append(n@(ball-surface)-self.plant.ball_radius)
         log.contact.append(any(set(c.geom) == {self.acrylic, self.ball_geom}
                                for c in d.contact[:d.ncon]))
+        if self.balls == 2:
+            b2 = d.xpos[self.ball_ids[1]].copy()
+            log.ball2.append(b2)
+            log.gap2.append(n@(b2-surface)-self.plant.ball_radius)
+            g2 = self.model.geom("ball2_surface").id
+            log.contact2.append(any(set(c.geom) == {self.acrylic, g2} for c in d.contact[:d.ncon]))
         if self.out.note:
             log.notes.append((self.out.note_time, self.out.note, self.out.note_index, self.out.note_beat))
 

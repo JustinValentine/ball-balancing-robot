@@ -124,6 +124,20 @@ public:
     void publish(const Frame& l,const Frame& r) {
         auto start=Clock::now();
         auto normal=normals.at(l.time_us);
+        if (tracker.balls() > 1) {
+            // One row per ball found; velocity is left to the consumer, which tells the balls apart.
+            auto all=normal ? tracker.updateAll(l.pixels,r.pixels,*normal) : std::vector<Measurement>{};
+            auto elapsed=std::chrono::duration_cast<std::chrono::microseconds>(Clock::now()-start).count();
+            if (all.empty()) std::cout << l.time_us << ',' << r.time_us << ",0,,,,,,,," << elapsed << '\n';
+            for (const auto& m : all) {
+                std::cout << std::setprecision(10) << l.time_us << ',' << r.time_us << ",1,";
+                for (double v:m.position.val) std::cout << v << ',';
+                std::cout << ",,," << m.error << ',' << elapsed << '\n';
+            }
+            std::cout << std::flush;
+            require(bool(std::cout),"Tracking output closed");
+            return;
+        }
         auto m=normal ? tracker.update(l.pixels,r.pixels,*normal) : std::nullopt;
         auto elapsed=std::chrono::duration_cast<std::chrono::microseconds>(Clock::now()-start).count();
         std::cout << std::setprecision(10) << l.time_us << ',' << r.time_us << ',' << int(bool(m)) << ',';

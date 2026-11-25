@@ -5,7 +5,8 @@
 //
 // The tracker's CSV arrives on stdin. Keys are read from the terminal: h hold, b balance,
 // j bounce, w/a/s/d move the target 5 mm, c centre it, +/- change the apex 10 mm, o circle on or
-// off, 1-5 bounce to a song, 0 stop the song, q quit. --sound plays each song note with aplay.
+// off, 1-5 bounce to a song, 0 stop the song, k juggle two balls, q quit. --sound plays each song
+// note with aplay. Juggling needs "balls: 2" in tracker.yml; drop the second ball in by hand.
 // Any communication fault, controller fault or large tracking error stops all three motors.
 //
 // Gravity calibration (remove the ball first):
@@ -200,7 +201,7 @@ struct Args {
                "                    [--ramp S] [--gravity-cal OUT.json] [--sound]\n"
                "                    <moteus transport options, e.g. --socketcan-iface can0>\n"
                "Reads tracker CSV on stdin. Keys: h hold, b balance, j bounce, wasd target, c centre,\n"
-               "+/- apex, o circle, 1-5 songs, 0 stop the song, q quit.\n";
+               "+/- apex, o circle, 1-5 songs, 0 stop the song, k juggle two balls, q quit.\n";
   std::exit(2);
 }
 
@@ -341,7 +342,7 @@ int run(int argc, char** argv) {
   bool circle = false;
   Terminal term;
   std::fprintf(stderr, "Ramping to the idle posture over %.1f s. Keys: h hold, b balance, j bounce, wasd "
-               "target, c centre, +/- apex, o circle, 1-%zu songs, 0 stop the song, q quit.\n", args.ramp, songs().size());
+               "target, c centre, +/- apex, o circle, 1-%zu songs, 0 stop the song, k juggle, q quit.\n", args.ramp, songs().size());
 
   timespec next;
   clock_gettime(CLOCK_MONOTONIC, &next);
@@ -419,6 +420,7 @@ int run(int argc, char** argv) {
         switch (k) {
           case 'h': ctl.set_mode(kHold); break;
           case 'b': ctl.set_mode(kBalance); break;
+          case 'k': ctl.set_mode(kJuggle); break;
           case 'j': ctl.set_mode(kBounce); break;
           case 'w': ty += 0.005; break;
           case 's': ty -= 0.005; break;

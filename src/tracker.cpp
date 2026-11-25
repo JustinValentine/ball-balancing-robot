@@ -27,6 +27,8 @@ Tracker::Tracker(const std::string& calibration, const std::string& settings, co
     minRadius = setting<double>(f,"min_radius_px"); maxRadius = setting<double>(f,"max_radius_px");
     minCircularity = setting<double>(f,"min_circularity"); maxError = setting<double>(f,"max_reprojection_px");
     diameter = setting<double>(f,"ball_diameter_mm"); diameterTolerance = setting<double>(f,"diameter_tolerance_fraction");
+    if (!f["balls"].empty()) count = setting<int>(f,"balls");
+    require(count >= 1 && count <= 4, "balls must be between 1 and 4");
     require(threshold >= 0 && threshold <= 255 && roi > 0 && roi <= 4096 && minRadius > 0 && maxRadius > minRadius
             && minCircularity > 0 && minCircularity <= 1 && maxError > 0 && diameter >= 0 && diameterTolerance > 0,
             "Invalid detector settings");
@@ -129,58 +131,88 @@ bool Tracker::refineSphere(const Ball& left, const Ball& right, cv::Vec3d normal
     return radius > 0 && std::isfinite(cv::norm(center));
 }
 
+std::vector<Tracker::Pair> Tracker::pairs(const std::vector<Ball>& a, const std::vector<Ball>& b,
+                                          cv::Vec3d normal) const {
+    std::vector<Pair> out;
+    cv::Vec3d rightNormal = cv::Matx33d(R) * normal;
+    for (size_t i=0; i<a.size(); ++i) for (size_t k=0; k<b.size(); ++k) {
+        const Ball &l=a[i], &r=b[k];
+        cv::Vec3d oL{}, oR{};
+        cv::Mat projection;
+        if (thickness > 0) {
+            auto dl=cv::normalize(cv::Vec3d(l.ray.x,l.ray.y,1));
+            auto dr=cv::normalize(cv::Vec3d(r.ray.x,r.ray.y,1));
+            if (dl.dot(normal)<=0 || dr.dot(rightNormal)<=0) continue;
+            oL=slabOrigin(dl,normal); oR=slabOrigin(dr,rightNormal);
+            cv::Mat adjusted = R*cv::Mat(oL)+T-cv::Mat(oR);
+            cv::hconcat(R,adjusted,projection);
+        }
+        cv::Mat h;
+        cv::triangulatePoints(P[0],thickness > 0 ? projection : P[1],std::vector<cv::Point2d>{l.ray},std::vector<cv::Point2d>{r.ray},h);
+        double w = h.at<double>(3);
+        if (std::abs(w) < 1e-12) continue;
+        cv::Vec3d x(h.at<double>(0)/w,h.at<double>(1)/w,h.at<double>(2)/w);
+        cv::Mat xr = R*cv::Mat(x+oL)+T-cv::Mat(oR);
+        cv::Vec3d y(xr.ptr<double>());
+        if (!(x[2]>0 && y[2]>0)) continue;
+        auto residual = [&](int s, cv::Vec3d p, cv::Point2d obs) {
+            return std::hypot((p[0]/p[2]-obs.x)*K[s].at<double>(0,0),
+                              (p[1]/p[2]-obs.y)*K[s].at<double>(1,1));
+        };
+        double err = std::max(residual(0,x,l.ray),residual(1,y,r.ray));
+        double d1=2*cv::norm(x)*l.sineRadius, d2=2*cv::norm(y)*r.sineRadius;
+        if (err > maxError || std::abs(d1-d2) > diameterTolerance*std::max(d1,d2)) continue;
+        if (diameter && std::max(std::abs(d1-diameter),std::abs(d2-diameter)) > diameterTolerance*diameter) continue;
+        out.push_back({err/maxError + (2-l.quality-r.quality), (d1+d2)*0.25, x+oL, err, i, k});
+    }
+    return out;
+}
+
 std::optional<Measurement> Tracker::update(const cv::Mat& left, const cv::Mat& right, cv::Vec3d normal) {
     require(left.size() == size && right.size() == size && left.type()==CV_8UC1 && right.type()==CV_8UC1,
             "Images must match the calibrated MONO8 image size");
     for (bool local : {true,false}) {
         if (local && !previous[0]) continue;
         auto a = detect(0,left,local), b = detect(1,right,local);
-        std::optional<Measurement> best;
-        cv::Point2d selected[2];
-        double bestScore = INFINITY;
-        const Ball *bestL=nullptr, *bestR=nullptr;
-        double bestRadius=0;
-        cv::Vec3d rightNormal = cv::Matx33d(R) * normal;
-        for (auto& l : a) for (auto& r : b) {
-            cv::Vec3d oL{}, oR{};
-            cv::Mat projection;
-            if (thickness > 0) {
-                auto dl=cv::normalize(cv::Vec3d(l.ray.x,l.ray.y,1));
-                auto dr=cv::normalize(cv::Vec3d(r.ray.x,r.ray.y,1));
-                if (dl.dot(normal)<=0 || dr.dot(rightNormal)<=0) continue;
-                oL=slabOrigin(dl,normal); oR=slabOrigin(dr,rightNormal);
-                cv::Mat adjusted = R*cv::Mat(oL)+T-cv::Mat(oR);
-                cv::hconcat(R,adjusted,projection);
-            }
-            cv::Mat h;
-            cv::triangulatePoints(P[0],thickness > 0 ? projection : P[1],std::vector<cv::Point2d>{l.ray},std::vector<cv::Point2d>{r.ray},h);
-            double w = h.at<double>(3);
-            if (std::abs(w) < 1e-12) continue;
-            cv::Vec3d x(h.at<double>(0)/w,h.at<double>(1)/w,h.at<double>(2)/w);
-            cv::Mat xr = R*cv::Mat(x+oL)+T-cv::Mat(oR);
-            cv::Vec3d y(xr.ptr<double>());
-            if (!(x[2]>0 && y[2]>0)) continue;
-            auto residual = [&](int s, cv::Vec3d p, cv::Point2d obs) {
-                return std::hypot((p[0]/p[2]-obs.x)*K[s].at<double>(0,0),
-                                  (p[1]/p[2]-obs.y)*K[s].at<double>(1,1));
-            };
-            double err = std::max(residual(0,x,l.ray),residual(1,y,r.ray));
-            double d1=2*cv::norm(x)*l.sineRadius, d2=2*cv::norm(y)*r.sineRadius;
-            if (err > maxError || std::abs(d1-d2) > diameterTolerance*std::max(d1,d2)) continue;
-            if (diameter && std::max(std::abs(d1-diameter),std::abs(d2-diameter)) > diameterTolerance*diameter) continue;
-            double score = err/maxError + (2-l.quality-r.quality);
-            if (previous[0]) score += (cv::norm(l.pixel-*previous[0])+cv::norm(r.pixel-*previous[1]))/(2*roi);
-            if (score < bestScore) {
-                bestScore=score; best=Measurement{x+oL,err};
-                bestL=&l; bestR=&r; bestRadius=(d1+d2)*0.25;
-                selected[0]=l.pixel; selected[1]=r.pixel;
-            }
-        }
-        if (best && (!thickness || refineSphere(*bestL,*bestR,normal,best->position,bestRadius))) {
-            previous[0]=selected[0]; previous[1]=selected[1];
-            return best;
+        auto found = pairs(a,b,normal);
+        if (previous[0])
+            for (auto& p : found)
+                p.score += (cv::norm(a[p.left].pixel-*previous[0])+cv::norm(b[p.right].pixel-*previous[1]))/(2*roi);
+        auto best = std::min_element(found.begin(),found.end(),[](const Pair& x,const Pair& y){return x.score<y.score;});
+        if (best == found.end()) continue;
+        Measurement m{best->position,best->error};
+        if (!thickness || refineSphere(a[best->left],b[best->right],normal,m.position,best->radius)) {
+            previous[0]=a[best->left].pixel; previous[1]=b[best->right].pixel;
+            return m;
         }
     }
     previous[0].reset(); previous[1].reset();
     return {};
+}
+
+std::vector<Measurement> Tracker::updateAll(const cv::Mat& left, const cv::Mat& right, cv::Vec3d normal) {
+    if (count == 1) {
+        auto m = update(left,right,normal);
+        return m ? std::vector<Measurement>{*m} : std::vector<Measurement>{};
+    }
+    require(left.size() == size && right.size() == size && left.type()==CV_8UC1 && right.type()==CV_8UC1,
+            "Images must match the calibrated MONO8 image size");
+    auto a = detect(0,left,false), b = detect(1,right,false);
+    auto found = pairs(a,b,normal);
+    std::sort(found.begin(),found.end(),[](const Pair& x,const Pair& y){return x.score<y.score;});
+    // Best matches first; each outline is used once and balls must not overlap.
+    std::vector<Measurement> out;
+    std::vector<bool> usedL(a.size()), usedR(b.size());
+    for (const auto& p : found) {
+        if (static_cast<int>(out.size()) == count) break;
+        if (usedL[p.left] || usedR[p.right]) continue;
+        Measurement m{p.position,p.error};
+        if (thickness && !refineSphere(a[p.left],b[p.right],normal,m.position,p.radius)) continue;
+        bool apart = true;
+        for (const auto& o : out) apart &= cv::norm(o.position-m.position) > 2*p.radius*0.9;
+        if (!apart) continue;
+        usedL[p.left] = usedR[p.right] = true;
+        out.push_back(m);
+    }
+    return out;
 }

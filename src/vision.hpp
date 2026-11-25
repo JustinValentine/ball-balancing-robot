@@ -58,8 +58,14 @@ class Tracker {
     int threshold, roi;
     bool bright;
     double minRadius, maxRadius, minCircularity, maxError, diameter, diameterTolerance;
+    int count = 1;
     std::vector<Ball> detect(int side, const cv::Mat& image, bool local) const;
+    struct Pair { double score, radius; cv::Vec3d position; double error; size_t left, right; };
+    std::vector<Pair> pairs(const std::vector<Ball>& a, const std::vector<Ball>& b, cv::Vec3d normal) const;
 public:
     Tracker(const std::string& calibration, const std::string& settings, const Rig&);
+    int balls() const { return count; }
     std::optional<Measurement> update(const cv::Mat& left, const cv::Mat& right, cv::Vec3d normal);
+    // Up to balls() separate balls from a full-image search, best match first.
+    std::vector<Measurement> updateAll(const cv::Mat& left, const cv::Mat& right, cv::Vec3d normal);
 };

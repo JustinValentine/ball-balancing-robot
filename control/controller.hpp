@@ -497,14 +497,16 @@ struct ImpactPlan {
   bool valid = false, saturated = false;
   double apex = 0;    // Apex the rebound was planned for.
   double flight = 0;  // Flight time the rebound was planned for (songs), s.
+
   double t = 0, yaw = 0, yaw_pre = 0, nx = 0, ny = 0, yaw_rate = 0, surface_speed = 0;
   V3 p_in{}, v_in{}, v_out{};
 };
 
 // ---------------------------------------------------------------- controller
 
-enum Mode { kHold = 0, kBalance = 1, kBounce = 2 };
-enum Phase { kLevel = 0, kBalancing = 1, kSettling = 2, kLaunching = 3, kBouncing = 4, kCatching = 5, kCalibrating = 6 };
+enum Mode { kHold = 0, kBalance = 1, kBounce = 2, kJuggle = 3 };
+enum Phase { kLevel = 0, kBalancing = 1, kSettling = 2, kLaunching = 3, kBouncing = 4, kCatching = 5, kCalibrating = 6,
+             kJuggling = 7 };
 
 struct Output {
   Q3 q{0, 0, 0}, qd{0, 0, 0}, tau{0, 0, 0};
@@ -519,12 +521,14 @@ struct Output {
   int note = 0, note_index = -1;  // MIDI note of a song impact that just happened, else 0.
   double note_time = 0;           // When that impact was planned to happen.
   double note_beat = 0;           // When the song's schedule wanted it.
+  bool ball2_valid = false;       // Second ball, when juggling two.
+  V3 ball2{0, 0, 0};
 };
 
 class Controller {
  public:
   Controller(const std::string& path, double dt)
-      : c_(Config::load(path, &platform_)), k_(platform_, c_.surface_offset), est_(c_), bal_(c_, dt), cal_(k_, c_),
+      : c_(Config::load(path, &platform_)), k_(platform_, c_.surface_offset), est_(c_), est2_(c_), bal_(c_, dt), cal_(k_, c_),
         dt_(dt) {
     gravity_ = GravityModel::plate(c_.plate_mass, c_.plate_com);
     if (!c_.gravity.empty()) {
@@ -549,6 +553,7 @@ class Controller {
       throw std::runtime_error("Idle posture has no solution");
     dz_dyaw_ = (z1-z0)/1e-6;
     target_ = centre_;
+    juggle_centre_ = centre_;
     Pose px, py;
     k_.pose(Posture{c_.idle_yaw, 1e-5, 0}, &px);
     k_.pose(Posture{c_.idle_yaw, 0, 1e-5}, &py);
@@ -570,7 +575,14 @@ class Controller {
   const AxisLqr& lqr() const { return bal_.lqr(); }
   V3 centre() const { return centre_; }
 
-  void set_mode(int m) { request_ = m; }
+  void set_mode(int m) {
+    if (m == kJuggle && request_ != kJuggle) juggle_centre_ = target_;
+    if (m != kJuggle && request_ == kJuggle) {
+      target_ = juggle_centre_;
+      est2_.invalidate();
+    }
+    request_ = m;
+  }
   // Target relative to the plate centre at idle, metres.
   void set_target(double x, double y) {
     bal_.clear_path();
@@ -607,6 +619,9 @@ class Controller {
   }
   int song() const { return song_; }
 
+  // Two-ball juggling: half the distance between the two columns, m.
+  void set_juggle_spacing(double half) { juggle_half_ = std::clamp(half, 0.025, 0.1); }
+
   // Balance along a path (relative to the plate centre): position, velocity and acceleration.
   void set_path(const double* x, const double* v, const double* a) {
     const double p[2] = {centre_[0]+x[0], centre_[1]+x[1]};
@@ -636,8 +651,17 @@ class Controller {
     }
     const PlateFn past = [this](double t) { return history_.at(t); };
     std::sort(pending_.begin(), pending_.end(), [](auto& a, auto& b) { return a.first < b.first; });
-    for (const auto& m : pending_) est_.update(m.first, m.second, past);
+    // Measurements of one stereo pair share a time; with two balls each goes to its own track.
+    for (size_t i = 0; i < pending_.size();) {
+      size_t j = i;
+      while (j < pending_.size() && pending_[j].first == pending_[i].first) j++;
+      assign(pending_[i].first, i, j, past);
+      i = j;
+    }
     pending_.clear();
+    valid2_ = est2_.valid(now) && request_ == kJuggle;
+    ball2_ = est2_.ball();
+    if (valid2_) est2_.propagate(ball2_, now, past, nullptr, false);
 
     const bool valid = est_.valid(now);
     Ball b = est_.ball();
@@ -673,6 +697,8 @@ class Controller {
     out.contact = b.contact;
     out.ball = b.p;
     out.ball_v = b.v;
+    out.ball2_valid = valid2_;
+    out.ball2 = ball2_.p;
     out.yaw = y[0];
     out.nx = y[1];
     out.ny = y[2];
@@ -940,7 +966,24 @@ class Controller {
       if (phase_ == kBalancing && previous != kBalancing) enter_balance(now, b);
       return;
     }
-    // Bounce requested.
+    // Bounce or juggle requested. Juggling launches the first ball from the centre like a bounce;
+    // a second ball dropped in by hand is then juggled with it in two columns.
+    if (request_ == kJuggle) {
+      const bool flying = phase_ == kBouncing || phase_ == kJuggling;
+      target_ = flying ? column(0) : juggle_centre_;
+      // A bounce touches the plate for milliseconds; only a resting ball ends the juggle.
+      if (flying && valid2_ && !resting) {
+        if (phase_ != kJuggling) {
+          grid_t0_ = -1;
+          strike_t_[0] = strike_t_[1] = 0;
+          flight_err_[0] = flight_err_[1] = 0;
+        }
+        phase_ = kJuggling;
+        juggle_step(now, b);
+        return;
+      }
+      if (phase_ == kJuggling) phase_ = kBouncing;
+    }
     switch (phase_) {
       case kLevel:
       case kBalancing:
@@ -987,6 +1030,141 @@ class Controller {
         }
         break;
     }
+  }
+
+  // Give each measurement of one stereo pair to a ball track. Outside juggling all go to the first
+  // track (the one nearest to it when there are several); when juggling, detections are matched
+  // to the two tracks by distance to their predictions and a new one starts the second track.
+  void assign(double t, size_t from, size_t to, const PlateFn& past) {
+    std::vector<V3> z;
+    for (size_t i = from; i < to; i++) z.push_back(pending_[i].second);
+    auto predicted = [&](Estimator& e, V3* p) {
+      if (!e.valid(t)) return false;
+      Ball b = e.ball();
+      e.propagate(b, t, past, nullptr, false);
+      *p = b.p;
+      return true;
+    };
+    V3 p0, p1;
+    const bool h0 = predicted(est_, &p0);
+    if (request_ != kJuggle || (z.size() == 1 && !est2_.valid(t))) {
+      size_t best = 0;
+      if (h0)
+        for (size_t i = 1; i < z.size(); i++)
+          if (norm(z[i]-p0) < norm(z[best]-p0)) best = i;
+      if (request_ != kJuggle || !h0 || norm(z[best]-p0) < 0.06) { est_.update(t, z[best], past); return; }
+      est2_.update(t, z[best], past);  // A second ball has appeared.
+      return;
+    }
+    const bool h1 = predicted(est2_, &p1);
+    if (z.size() == 1) {
+      const double d0 = h0 ? norm(z[0]-p0) : 1e9, d1 = h1 ? norm(z[0]-p1) : 1e9;
+      (d0 <= d1 ? est_ : est2_).update(t, z[0], past);
+      return;
+    }
+    // Two detections: keep the pairing with the smaller total distance.
+    const double straight = (h0 ? norm(z[0]-p0) : 0)+(h1 ? norm(z[1]-p1) : 0);
+    const double crossed = (h0 ? norm(z[1]-p0) : 0)+(h1 ? norm(z[0]-p1) : 0);
+    const size_t a = straight <= crossed ? 0 : 1;
+    est_.update(t, z[a], past);
+    est2_.update(t, z[1-a], past);
+  }
+
+  V3 column(int ball) const {
+    const double side = ball == 0 ? -1 : 1;
+    return {juggle_centre_[0]+side*juggle_half_, juggle_centre_[1], 0};
+  }
+
+  // Strike whichever ball lands next. The balls share a grid of impact slots half a flight
+  // apart; each ball owns every other slot, and each strike sends its ball to its own next slot.
+  // A ball that has drifted off the grid, or bounced without a planned strike, is pulled back by
+  // its next strike, so the two cannot settle into landing together.
+  void juggle_step(double now, const Ball& b0) {
+    if (plan_.valid && now > plan_.t+c_.hold_window) {
+      const int k = plan_ball_;
+      for (int a = 0; a < 2; a++)
+        juggle_bias_[k][a] = std::clamp(juggle_bias_[k][a]+c_.lateral_integral*(column(k)[a]-plan_.p_in[a]), -0.3, 0.3);
+      // Learn how long this ball's flights really take compared with what was asked.
+      const double actual = plan_.t-strike_t_[k];
+      if (strike_t_[k] > 0 && asked_[k] > 0 && actual > 0.5*asked_[k] && actual < 1.5*asked_[k])
+        flight_err_[k] += 0.3*(std::clamp(actual-asked_[k], -0.08, 0.08)-flight_err_[k]);
+      strike_t_[k] = plan_.t;
+      asked_[k] = plan_.flight;
+      lock_until_ = plan_.t+std::max(0.03, std::fabs(plan_.surface_speed)/c_.decel);
+      plan_ = ImpactPlan{};
+    }
+    if (now < lock_until_) return;
+    if (plan_.valid && plan_.t-now < c_.freeze) return;
+    const Ball* balls[2] = {&b0, &ball2_};
+    const double T0 = flight_time(launch_speed(apex_, c_.drag), c_.drag), half = 0.5*T0;
+    ImpactPlan next[2];
+    for (int k = 0; k < 2; k++) {
+      if (balls[k]->contact) continue;
+      target_ = column(k);
+      for (int a = 0; a < 2; a++) bias_[a] = juggle_bias_[k][a];
+      next[k] = plan_impact(now, *balls[k], apex_);
+      if (next[k].valid && (next[k].t < now+0.03 || next[k].t > now+1.2)) next[k].valid = false;
+    }
+    // Keep refining the planned strike; switch only if the other ball clearly lands first and
+    // there is still time to strike it.
+    int A = -1;
+    if (plan_.valid) {
+      A = plan_ball_;
+      const int o = 1-A;
+      if (next[o].valid && next[o].t < plan_.t-0.02) A = o;
+    } else {
+      for (int k = 0; k < 2; k++)
+        if (next[k].valid && (A < 0 || next[k].t < next[A].t)) A = k;
+    }
+    if (A < 0 || !next[A].valid) return;
+    if (grid_t0_ < 0) {
+      grid_t0_ = next[A].t;
+      grid_owner_ = A;
+    }
+    // The other ball lands too soon after this strike to get one of its own, so it will rebound
+    // off the plate unforced. Predict that rebound and move the grid onto it: the other ball is
+    // struck normally when it next lands, and this ball is sent half a period away from it.
+    const bool B_soon = next[1-A].valid && next[1-A].t-next[A].t < 0.1;
+    if (B_soon) {
+      const double vin = std::max(0.0, -next[1-A].v_in[2]);
+      grid_t0_ = next[1-A].t+flight_time(est_.restitution()*vin, c_.drag);
+      grid_owner_ = 1-A;
+    }
+    // This ball's own slots are grid_t0 + (2m + parity) * half; aim for the one nearest a full flight.
+    const double parity = A == grid_owner_ ? 0 : 1;
+    const double m = std::round((next[A].t+T0-grid_t0_-parity*half)/(2*half));
+    const double slot = grid_t0_+(2*m+parity)*half;
+    const double T = std::clamp(slot-next[A].t, 0.6*T0, 1.4*T0);
+    const double asked = std::clamp(T-flight_err_[A], 0.5*T0, 1.5*T0);
+    target_ = column(A);
+    for (int a = 0; a < 2; a++) bias_[a] = juggle_bias_[A][a];
+    ImpactPlan p = plan_impact(now, *balls[A], apex_for_flight(asked, c_.drag));
+    // When the other ball lands within 100 ms it meets the same tilt, so strike level rather
+    // than kick it sideways.
+    if (B_soon) p.nx = p.ny = 0;
+    if (!p.valid) return;
+    p.flight = asked;
+    plan_ball_ = A;
+    execute(now, p);
+  }
+
+  // Plate motion for a planned impact: the stroke, the stop after it and the tilt.
+  void execute(double now, const ImpactPlan& p) {
+    const double left = p.t-now;
+    if (left < 0.03) return;
+    plan_ = p;
+    if (left > c_.stroke_time+0.04) {
+      yaw_.to(now, left-c_.stroke_time, p.yaw_pre, 0, 0);
+      yaw_.then(c_.stroke_time, p.yaw, p.yaw_rate, 0);
+    } else {
+      yaw_.to(now, left, p.yaw, p.yaw_rate, 0);
+    }
+    const double T_d = std::clamp(std::fabs(p.surface_speed)/c_.decel, 0.02, 0.1);
+    yaw_.then(T_d, p.yaw+p.yaw_rate*T_d/2, 0, 0);
+    yaw_.then(c_.return_time, c_.idle_yaw, 0, 0);
+    const double tilt_time = std::max(left-c_.hold_window, 0.03);
+    nx_.to(now, tilt_time, p.nx, 0, 0);
+    ny_.to(now, tilt_time, p.ny, 0, 0);
   }
 
   // Circle reference while balancing: the radius eases in so the path starts at rest.
@@ -1097,27 +1275,13 @@ class Controller {
       p = plan_impact(now, b, apex > 0 ? pump : 0);
     }
     if (!p.valid) return;
-    const double left = p.t-now;
-    if (left < 0.03) return;
-    plan_ = p;
-    if (left > c_.stroke_time+0.04) {
-      yaw_.to(now, left-c_.stroke_time, p.yaw_pre, 0, 0);
-      yaw_.then(c_.stroke_time, p.yaw, p.yaw_rate, 0);
-    } else {
-      yaw_.to(now, left, p.yaw, p.yaw_rate, 0);
-    }
-    const double T_d = std::clamp(std::fabs(p.surface_speed)/c_.decel, 0.02, 0.1);
-    yaw_.then(T_d, p.yaw+p.yaw_rate*T_d/2, 0, 0);
-    yaw_.then(c_.return_time, c_.idle_yaw, 0, 0);
-    const double tilt_time = std::max(left-c_.hold_window, 0.03);
-    nx_.to(now, tilt_time, p.nx, 0, 0);
-    ny_.to(now, tilt_time, p.ny, 0, 0);
+    execute(now, p);
   }
 
   Json platform_;
   Config c_;
   Kinematics k_;
-  Estimator est_;
+  Estimator est_, est2_;
   Balancer bal_;
   GravityCalibration cal_;
   GravityModel gravity_;
@@ -1140,6 +1304,13 @@ class Controller {
   std::map<double, double> flight_error_;  // Actual minus planned flight time, by note length.
   std::pair<int, double> note_{0, 0};
   double note_beat_ = 0;
+  // Two balls.
+  bool valid2_ = false;
+  Ball ball2_;
+  V3 juggle_centre_{0, 0, 0};
+  double juggle_half_ = 0.045, juggle_bias_[2][2] = {{0, 0}, {0, 0}};
+  int plan_ball_ = 0, grid_owner_ = 0;
+  double grid_t0_ = -1, strike_t_[2] = {0, 0}, asked_[2] = {0, 0}, flight_err_[2] = {0, 0};
   int request_ = kHold, phase_ = kLevel;
   ImpactPlan plan_;
   Output last_;

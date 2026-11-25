@@ -18,3 +18,5 @@ fixed_plate_normal: [0., 0., 1.]
 normal_max_age_us: 5000
 # Positive when capture timestamps follow exposure, measured on the rig.
 capture_minus_exposure_us: 0
+# Balls to report per stereo pair; above 1 every ball found gets its own row.
+balls: 1
