@@ -197,10 +197,13 @@ def control(args, cfg):
                     else:
                         {"mode": sim.mode, "apex": sim.apex}.get(what, lambda v: sim.target(*v))(value)
                     print(what, value)
-                notes = len(sim.log.notes)
+                seen = len(sim.log.contact)
                 sim.run(.01)
-                for _, midi, _, _ in sim.log.notes[notes:]:
-                    player.play(midi)
+                # A click whenever the ball lands, louder for a harder landing.
+                c, g = sim.log.contact, sim.log.gap
+                for i in range(max(seen, 1), len(c)):
+                    if c[i] and not c[i-1] and max(g[max(0, i-20):i]) > .004:
+                        player.play(np.sqrt(2*9.81*max(g[max(0, i-300):i])))
                 viewer.sync()
                 if PHASES[sim.out.phase] != last:
                     last = PHASES[sim.out.phase]
@@ -248,12 +251,15 @@ def control(args, cfg):
         r = np.linalg.norm(log["ball"][keep, :2]-sim.centre[:2], axis=1)*1000
         print(f"Circle: radius {r.mean():.1f} +- {r.std():.1f} mm (asked {args.circle_mm:.0f})")
     if args.wav:
-        if not sim.log.notes:
-            print("No song notes to write")
-        else:
-            start = log["t"][0]
-            sound.write_wav(args.wav, sound.render([(tt-start, midi) for tt, midi, _, _ in sim.log.notes], t[-1]))
-            print(f"Wrote {args.wav}")
+        # The sound the ball makes: a click at each landing, louder for a faster ball.
+        c, g = log["contact"].astype(bool), log["gap"]
+        on = [i for i in np.flatnonzero(c[1:] & ~c[:-1])+1 if g[max(0, i-20)] > .004]
+        events, last = [], 0
+        for i in on:
+            events.append((log["t"][i]-log["t"][0], np.sqrt(2*9.81*max(g[last:i].max(), 0))))
+            last = i
+        sound.write_wav(args.wav, sound.render(events, t[-1]))
+        print(f"Wrote {args.wav}: {len(events)} impacts")
     torque = np.abs(log["torque"])
     print(f"Peak torque {torque.max():.2f} N m, saturated {np.mean(torque >= sim.plant.torque_limit-1e-6)*100:.1f}% of the time; "
           f"cranks {np.round(log['crank'].min(axis=0), 2)} to {np.round(log['crank'].max(axis=0), 2)} rad")
@@ -306,7 +312,7 @@ def main():
     run.add_argument("--lap",type=float,default=4,help="Seconds per lap of the circle")
     run.add_argument("--song",help="Bounce to a song: twinkle, ode, mary, jingle or shave")
     run.add_argument("--beat",type=float,default=0,help="Seconds per beat (default: the song's own)")
-    run.add_argument("--wav",type=Path,help="Write the song notes, timed at the impacts, to a WAV file")
+    run.add_argument("--wav",type=Path,help="Write the sound of the impacts (a click at each landing) to a WAV file")
     capture=sub.add_parser("record",help="Record headless simulated images, encoders and truth")
     verify=sub.add_parser("score",help="Compare C++ replay results with physics ground truth")
     for p in (view,export,capture,inspect):

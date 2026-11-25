@@ -105,7 +105,7 @@ python3 simulate.py control --song twinkle --wav twinkle.wav
 mjpython simulate.py control --view      # F9 circle, F10 next song
 ```
 
-The songs are twinkle, ode, mary, jingle and shave. Each note is one bounce and its length sets how high the ball goes, so the impacts land on the beat, within about 5 ms in simulation after the first bar. The simulator plays the notes, and on the robot `--sound` plays them through the PC with aplay. Half notes need strikes up to 0.8 m/s. A ball with less bounce than a ping-pong ball needs more than the 2.5 N m torque cap to keep the beat.
+The songs are twinkle, ode, mary, jingle and shave. Each note is one bounce and its length sets how high the ball goes, so the impacts land on the beat, within about 5 ms in simulation after the first bar. A ball can only click, so the simulator's sound and `--wav` are a click at each landing. On the robot `--sound` also plays the tune's notes through the PC with aplay, in time with the impacts. Half notes need strikes up to 0.8 m/s. A ball with less bounce than a ping-pong ball needs more than the 2.5 N m torque cap to keep the beat.
 
 ### Gravity calibration
 
