@@ -107,16 +107,26 @@ struct Ball {
 
 class Estimator {
  public:
-  explicit Estimator(const Config& c) : c_(c), restitution_(c.restitution) {
-    const M3& R = c.left_from_base;
-    // Camera noise is larger along the optical axis. Rotate it into the base frame.
-    const double var[3] = {c.noise_xy*c.noise_xy, c.noise_xy*c.noise_xy, c.noise_z*c.noise_z};
+  explicit Estimator(const Config& c) : c_(c), restitution_(c.restitution) {}
+
+  // Distance from the left camera at which the configured noise applies (the plate centre).
+  void set_noise_range(double r) { range0_ = r; }
+
+  // Measurement noise for a ball at z (base frame). Stereo noise is larger along the optical axis
+  // and grows with distance: across the image with range, in depth with range squared.
+  Mat<3, 3> noise(const V3& z) const {
+    const M3& R = c_.left_from_base;
+    const double k = range0_ > 0 ? norm(z-c_.left_origin)/range0_ : 1;
+    const double xy = c_.noise_xy*k, d = c_.noise_z*k*k;
+    const double var[3] = {xy*xy, xy*xy, d*d};
+    Mat<3, 3> Rm;
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 3; j++) {
         double s = 0;
-        for (int k = 0; k < 3; k++) s += R.m[k][i]*var[k]*R.m[k][j];
-        Rm_(i, j) = s;
+        for (int m = 0; m < 3; m++) s += R.m[m][i]*var[m]*R.m[m][j];
+        Rm(i, j) = s;
       }
+    return Rm;
   }
 
   double restitution() const { return restitution_; }
@@ -203,6 +213,7 @@ class Estimator {
     }
     std::vector<Impact> hits;
     propagate(b_, t, plate, &hits, true);
+    const Mat<3, 3> Rm_ = noise(z);
     // In contact the estimate is held on the surface, so judge lift-off from the camera itself:
     // two measurements clearly above the surface start a flight from the measured motion.
     {
@@ -274,7 +285,8 @@ class Estimator {
     b_.p = z;
     b_.P = Mat<6, 6>::eye()*1e-6;
     // A first sighting says nothing about speed; a ball near the plate rarely rolls faster than this.
-    for (int i = 0; i < 3; i++) { b_.P(i, i) = Rm_(i, i); b_.P(i+3, i+3) = 0.3*0.3; }
+    const Mat<3, 3> Rm = noise(z);
+    for (int i = 0; i < 3; i++) { b_.P(i, i) = Rm(i, i); b_.P(i+3, i+3) = 0.3*0.3; }
     b_.contact = false;
     valid_ = true;
     last_ = t;
@@ -304,7 +316,7 @@ class Estimator {
   }
 
   const Config& c_;
-  Mat<3, 3> Rm_;
+  double range0_ = 0;
   Ball b_;
   bool valid_ = false;
   double last_ = -1e9, learned_ = -1, restitution_;
@@ -549,6 +561,7 @@ class Controller {
       throw std::runtime_error("Idle posture has no solution");
     dz_dyaw_ = (z1-z0)/1e-6;
     target_ = centre_;
+    est_.set_noise_range(norm(centre_-c_.left_origin));
     Pose px, py;
     k_.pose(Posture{c_.idle_yaw, 1e-5, 0}, &px);
     k_.pose(Posture{c_.idle_yaw, 0, 1e-5}, &py);
